@@ -17,16 +17,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<robot xmlns:xacro="http://ros.org/wiki/xacro" name="ravel">
-    <xacro:include filename="$(find raven_description)/urdf/raven_properties.urdf.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/caster.urdf.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/depthai_macro.urdf.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/inertials.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/ld06.urdf.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/material.urdf.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/raven_gazebo.urdf.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/wheel.urdf.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/oakd.urdf.xacro" />
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="base">
+    <xacro:include filename="$(find s_description)/urdf/properties.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/caster.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/depthai_macro.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/inertials.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/ld06.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/material.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/gazebo.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/wheel.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/oakd.urdf.xacro" />
 
 
     <link name="base_link">
@@ -111,44 +111,8 @@ SOFTWARE.
         <origin xyz="${(body_length / 2) + 0.030}  ${((body_width / 2) - 0.0)} 0.040" rpy="0 0 0" />
     </xacro:ld06>
 
-    <!-- T265 y tilt is 31 degrees or 0.541 radians -->
-    <!-- Visual odometry camera -->
-    <!-- <link name="t265_pose_frame">
-        <collision>
-            <geometry>
-                <box size="${t265_width} ${t265_length} ${t265_height}" />
-                <origin xyz="0 0 0" rpy="0.0 0.0 0.0" />
-            </geometry>
-        </collision>
-        <visual>
-            <geometry>
-                <box size="${t265_width} ${t265_length} ${t265_height}" />
-            </geometry>
-            <origin xyz="0 0 0" rpy="0.0 0.0 0.0" />
-            <material name="t265_material" />
-        </visual>
-    </link>
-    <gazebo reference="t265_pose_frame">
-        <material>
-            Gazebo/DarkGrey
-        </material>
-    </gazebo>
-
-    <joint name="t265_to_base_footprint" type="fixed">
-        <parent link="t265_rotate_frame" />
-        <child link="base_footprint" />
-        <origin xyz="-${t265_x_offset} 0 -${t265_z_offset}" rpy="0 0 0" />
-    </joint>
-
-    <link name="t265_rotate_frame" />
-    <joint name="t265_rotator_joint" type="fixed">
-        <parent link="t265_pose_frame" />
-        <child link="t265_rotate_frame" />
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint> -->
-
-    <xacro:include filename="$(find raven_description)/urdf/time_of_flight.urdf.xacro" />
-    <xacro:include filename="$(find raven_description)/urdf/sonar.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/time_of_flight.urdf.xacro" />
+    <xacro:include filename="$(find s_description)/urdf/sonar.urdf.xacro" />
 
     <!-- <xacro:depthai_camera
         camera_name="oakd_left"

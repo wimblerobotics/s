@@ -17,4 +17,4 @@ Launch parameters:
 
 E.g.:
 
-    ros2 launch raven_description raven_description.launch.py -- use_state_pub_gui:=true
+    ros2 launch s_description s_description.launch.py -- use_state_pub_gui:=true
