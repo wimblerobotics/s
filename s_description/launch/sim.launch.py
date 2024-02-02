@@ -17,7 +17,7 @@ def generate_launch_description():
 
     my_package_name = 's_description'
     pkg_share = get_package_share_directory(my_package_name)
-    default_model_path = os.path.join(pkg_share, 'urdf', 'raven_wot265.urdf.xacro')
+    default_model_path = os.path.join(pkg_share, 'urdf', 'base.urdf.xacro')
 
     joint_state_configFilePath = os.path.join(
         get_package_share_directory(my_package_name),
@@ -39,25 +39,6 @@ def generate_launch_description():
                      }]
     )
 
-    # lidar_merge_node = launch_ros.actions.Node(
-    #         package='ira_laser_tools',
-    #         executable='laserscan_multi_merger',
-    #         name='laserscan_multi_merger',
-    #         parameters=[{
-    #                 "destination_frame": "base_link",
-    #                 "cloud_destination_topic": "/merged_lidar_cloud",
-    #                 "scan_destination_topic": "/scan",
-    #                 "laserscan_topics": "/scan_left_front /scan_right_rear",
-    #                 "angle_min": -3.14159,
-    #                 "angle_max": 3.14159,
-    #                 "angle_increment": 0.013935472816228867,
-    #                 "scan_time": 0.010,
-    #                 "range_min": 0.010,
-    #                 "range_max": 50.0
-    #         }],
-    #         # prefix=['xterm -e gdb run -ex --args'],
-    #         # respawn=True,
-    #         output='screen')
     
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
@@ -78,7 +59,6 @@ def generate_launch_description():
         launch.actions.DeclareLaunchArgument(name='use_state_pub_gui', default_value='False',
                                              description='Flag to enable joint_state_publisher_gui'),
         gazebo,
-        # lidar_merge_node,
         robot_state_publisher_node,
         spawn_entity
     ])
