@@ -1,0 +1,4 @@
+joint_state_publisher:
+  ros__parameters:
+    rate: 20
+    source_list: ['/raven_joint_states']

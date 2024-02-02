@@ -1,0 +1,14 @@
+alias cb='colcon build --symlink-install'
+alias fr='ros2 run tf2_tools view_frames'
+alias pm='ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2}}"'
+alias record='/home/ros/raven_ws/src/raven/raven_base/scripts/rosbag_record.sh'
+alias rd='rosdep install --from-paths src --ignore-src -r -y'
+alias roam='DO_RVIZ=true DO_JOYSTICK=false ros2 launch raven_base roam_launch.py'
+alias roam_joy='DO_RVIZ=false DO_JOYSTICK=true ros2 launch raven_base roam_launch.py'
+alias s2='source /home/ros/setupRos2.sh'
+alias sim='clear;ros2 launch raven_description sim.launch.py'
+alias tele='ros2 run teleop_twist_keyboard teleop_twist_keyboard'
+export LINOROBOT2_BASE=2wd
+export LINOROBOT2_LASER_SENSOR=rplidar
+export LINOROBOT2_DEPTH_SENSOR=realsense
+source /opt/ros/humble/setup.bash

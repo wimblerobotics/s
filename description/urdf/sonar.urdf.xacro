@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+Copyright (c) 2021 Michael Wimble
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="time_of_flight">
+    <xacro:property name="back_edge" value="${-body_length +wheel_offset_from_front}" />
+    <xacro:property name="front_edge" value="${wheel_offset_from_front}" />
+    <xacro:property name="case_left_edge" value="${body_width/2}" />
+    <xacro:property name="case_right_edge" value="-${body_width/2}" />
+    <xacro:property name="sonar_depth" value="0.020" />
+    <xacro:property name="sonar_height" value="0.030" />
+    <xacro:property name="sonar_width" value="0.050" />
+    <xacro:property name="sonar_z_offset" value="0.173" />
+
+
+    <xacro:macro name="sonar_unit" params="number *joint_pose">
+        <link name="sonar_${number}">
+            <visual>
+                <geometry>
+                    <box size="${sonar_depth} ${sonar_width} ${sonar_height}" />
+                </geometry>
+                <material name="black" />
+                <origin xyz="0 0 0" rpy="0 0 0" />
+            </visual>
+        </link>
+        <joint name="baselink_to_sonar_${number}" type="fixed">
+            <child link="sonar_${number}" />
+            <parent link="base_link" />
+            <xacro:insert_block name="joint_pose" />
+        </joint>
+        <gazebo reference="sonar_${number}">
+            <material>
+                Gazebo/Black
+            </material>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:sonar_unit number="0">
+        <origin xyz="${front_edge+(sonar_depth/2)} 0 ${(sonar_height/2)+sonar_z_offset}" rpy="0 0 0" />
+    </xacro:sonar_unit>
+
+    <xacro:sonar_unit number="1">
+        <origin xyz="0 ${case_left_edge+(sonar_depth/2)} ${(sonar_height/2)+sonar_z_offset}"
+            rpy="0 0 ${M_PI / 2}" />
+    </xacro:sonar_unit>
+
+    <xacro:sonar_unit number="2">
+        <origin xyz="0 ${case_right_edge-(sonar_depth/2)} ${(sonar_height/2)+sonar_z_offset}"
+            rpy="0 0 -${M_PI / 2}" />
+    </xacro:sonar_unit>
+
+    <xacro:sonar_unit number="3">
+        <origin xyz="${back_edge-(sonar_depth/2)} 0 ${(sonar_height/2)+sonar_z_offset}"
+            rpy="0 0 ${M_PI}" />
+    </xacro:sonar_unit>
+
+</robot>
