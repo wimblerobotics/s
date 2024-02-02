@@ -1,4 +1,4 @@
-# s WimbleRobotics git for the 'S' robot
+# WimbleRobotics git for the 'S' robot
 
 ## Building the docker image with NVIDIA GPU support
 `
