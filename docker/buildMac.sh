@@ -1,0 +1,1 @@
+docker build -t macros  -f DockerfileMac .
