@@ -44,7 +44,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
             launch_arguments={
-              'world': os.path.join(pkg_share, 'worlds', 'test_world.world')
+              'world': os.path.join(pkg_share, 'worlds', 'playground.world')
             }.items()
         )
 

@@ -178,6 +178,7 @@ alias tele='ros2 run teleop_twist_keyboard teleop_twist_keyboard'
 export LINOROBOT2_BASE=2wd
 export LINOROBOT2_LASER_SENSOR=rplidar
 export LINOROBOT2_DEPTH_SENSOR=realsense
+source /usr/share/gazebo/setup.bash
 source /opt/ros/humble/setup.bash
 EOT
 
