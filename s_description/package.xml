@@ -3,7 +3,7 @@
 <package format="3">
   <name>s_description</name>
   <version>1.0.0</version>
-  <description>Raven URDF package</description>
+  <description>S URDF package</description>
   <maintainer email="mike@wimblerobotics.com">Michael Wimble</maintainer>
   <license>MIT</license>
 

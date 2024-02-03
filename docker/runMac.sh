@@ -7,7 +7,6 @@ docker run \
     -e ALSADEV=hw:2,0 \
     -v /home/ros/s_ws:/home/ros/s_ws \
     --workdir /home/ros/s_ws \
-    --env="DISPLAY=host.docker.internal:0" 
     --user 1000:1000 \
     macros
 

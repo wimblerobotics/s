@@ -154,7 +154,6 @@ RUN cat <<EOT >> /home/ros/.bashrc
 alias cb='colcon build --symlink-install'
 alias fr='ros2 run tf2_tools view_frames'
 alias pm='ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2}}"'
-alias record='/home/ros/raven_ws/src/raven/raven_base/scripts/rosbag_record.sh'
 alias rd='rosdep install --from-paths src --ignore-src -r -y'
 alias roam='DO_RVIZ=true DO_JOYSTICK=false ros2 launch raven_base roam_launch.py'
 alias roam_joy='DO_RVIZ=false DO_JOYSTICK=true ros2 launch raven_base roam_launch.py'

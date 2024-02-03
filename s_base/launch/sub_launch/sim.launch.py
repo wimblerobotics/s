@@ -1,93 +1,48 @@
-from ament_index_python.packages import get_package_share_directory
-from launch.actions import (DeclareLaunchArgument, IncludeLaunchDescription)
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
-import launch_ros
 import os
 import sys
+import xacro
+import yaml
+
+# import launch
+import launch_ros.actions
+# from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
+from ament_index_python.packages import get_package_share_directory
+
 
 s_sub_launch_path = os.path.join(get_package_share_directory('s_base'),
                                     'launch', 'sub_launch')
 sys.path.append(s_sub_launch_path)
-# print(sys.path)
 import common
 
 def generate_launch_description():
-    do_nav2 = os.getenv('DO_NAV2', default='False') in (
-        'True', 'true', '1', 't', 'T')
-    do_rviz = os.getenv('DO_RVIZ', default='True') in (
-        'True', 'true', '1', 't', 'T')
-    print(f'DO_NAV2: {do_nav2}')
-    print(f'DO_RVIZ: {do_rviz}')
-
-    param_dir = LaunchConfiguration(
-        'params_file',
-        default=os.path.join(
-            get_package_share_directory('s_base'),
-            'config',
-            'nav2_params.yaml'))
-    DeclareLaunchArgument(
-        'map',
-        default_value='map5',
-        description='Full path to map file to load'),
-
-    DeclareLaunchArgument(
-        'params_file',
-        default_value=param_dir,
-        description='Full path to param file to load'),
-    # # Bring up the twist multiplexer.
-    # multiplexer_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         [common.multiplexer_directory_path, '/launch/twist_multiplexer.launch.py'])
-    # )
-    # common.ld.add_action(multiplexer_launch)
 
     # Bring up the robot description (URDF).
-    s_description_launch = IncludeLaunchDescription(
+    description_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            common.s_description_directory_path, '/launch/sim.launch.py'
-        ]))
-    common.ld.add_action(s_description_launch)
+            common.s_description_directory_path, '/launch/description.launch.py'
+        ]),
+        launch_arguments={
+            'use_sim_time': common.use_sim_time
+        }.items()
+    )
+    common.ld.add_action(description_launch)
 
-    # # Bring up the LIDARs.
-    # lidars_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         [common.s_base_directory_path, '/launch/sub_launch/ldlidars.launch.py']))
-    # common.ld.add_action(lidars_launch)
-    
-    # # Bring up the OAK-Ds
-    # oakds_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         [common.s_base_directory_path, '/launch/sub_launch/oakds.launch.py']))
-    # common.ld.add_action(oakds_launch)
-
-    # Bring up the Nav2 stack.
-    if (do_nav2):
-        nav2_launch = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
-                common.s_base_directory_path,
-                '/launch/sub_launch/bringup_launch.py'
-            ]), 
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
             launch_arguments={
-                'map': common.map_file_name,
-                'use_sim_time': True,
-                'params_file': param_dir}.items()
-            )
-        common.ld.add_action(nav2_launch)
+              'world': os.path.join(common.s_description_directory_path, 'worlds', 'playground.world')
+            }.items()
+        )
+    common.ld.add_action(gazebo)
 
-    # Bring up rviz2
-    rviz_config_path = os.path.join(
-        common.rviz_directory_path, 'config', 'sim_config.rviz')
-    if do_rviz:
-        rviz_node = launch_ros.actions.Node(package='rviz2',
-                                            executable='rviz2',
-                                            name='rviz2',
-                                            output='screen',
-                                            arguments=['-d', rviz_config_path],
-                                            parameters=[{
-                                                'use_sim_time': True
-                                            }])
-        common.ld.add_action(rviz_node)
+    spawn_entity = launch_ros.actions.Node(package='gazebo_ros', executable='spawn_entity.py',
+        arguments=['-topic', 'robot_description',
+                    '-entity', 'my_bot'],
+        output='screen')
+    common.ld.add_action(spawn_entity)
 
-    # Launch
     return common.ld
