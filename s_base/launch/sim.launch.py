@@ -34,14 +34,16 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
             launch_arguments={
-              'world': os.path.join(common.s_description_directory_path, 'worlds', 'playground.world')
+              'world': os.path.join(common.s_description_directory_path, 'worlds', 'home.world')
             }.items()
         )
     common.ld.add_action(gazebo)
 
     spawn_entity = launch_ros.actions.Node(package='gazebo_ros', executable='spawn_entity.py',
         arguments=['-topic', 'robot_description',
-                    '-entity', 'my_bot'],
+                    '-entity', 'my_bot',
+                    '-x' , '8', 
+                    '-y', '3'],
         output='screen')
     common.ld.add_action(spawn_entity)
 
