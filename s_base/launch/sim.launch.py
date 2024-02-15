@@ -40,20 +40,31 @@ def generate_launch_description():
         output='screen')
     common.ld.add_action(spawn_entity)
 
-    # # Bring of the EKF node.
-    # start_robot_localization_cmd = launch_ros.actions.Node(
-    #     package='robot_localization',
-    #     executable='ekf_node',
-    #     name='ekf_filter_node',
-    #     output='screen',
-    #     parameters=[ 
-    #         {'use_sim_time': common.use_sim_time},
-    #         common.ekf_config_path,
-    #     ],
-    #     remappings=[("odometry/filtered", "odom")]
-    # )
-    # common.ld.add_action(start_robot_localization_cmd)
+    # Bring up the LIDAR multiplexer
+    lidar_multiplexer = launch_ros.actions.Node(
+            package='ira_laser_tools',
+            executable='laserscan_multi_merger',
+            name='laserscan_multi_merger',
+            parameters=[{
+                    "destination_frame": "base_link",
+                    "cloud_destination_topic": "/merged_lidar_cloud",
+                    "scan_destination_topic": "/scan",
+                    "laserscan_topics": "/scan_left_front /scan_right_rear",
+                    "angle_min": -3.14159,
+                    "angle_max": 3.14159,
+                    "angle_increment": 0.013935472816228867,
+                    "scan_time": 0.010,
+                    "range_min": 0.0504,
+                    "range_max": 20.0,
+                    "max_merge_time_diff": 1000000000.0,
+                    # "allow_scan_delay": use_sim_time, # -- code does not read this properly
+            }],
+            # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
+            output='screen'
+    )
+    common.ld.add_action(lidar_multiplexer)
 
+    
     # Bring up the robot description (URDF).
     description_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -65,6 +76,20 @@ def generate_launch_description():
         }.items()
     )
     common.ld.add_action(description_launch)
+
+    # Bring of the EKF node.
+    start_robot_localization_cmd = launch_ros.actions.Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[ 
+            {'use_sim_time': common.use_sim_time},
+            common.ekf_config_path,
+        ],
+        remappings=[("odometry/filtered", "odom")]
+    )
+    common.ld.add_action(start_robot_localization_cmd)
 
     # # Bring up the navigation stack.
     # navigation_launch_path = PathJoinSubstitution(
@@ -83,7 +108,7 @@ def generate_launch_description():
     # )
     # common.ld.add_action(nav2_launch)
 
-    # Bring up SLAM.
+    # # Bring up SLAM.
     slam_launch_path = PathJoinSubstitution(
         [FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py']
     )

@@ -15,7 +15,7 @@
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
       <ros>
-        <argument>odom:=odom/unfiltered</argument>
+        <argument>odom:=odom_unfiltered</argument>
       </ros>
       <updateRate>100</updateRate>
       <left_joint>front_left_wheel_joint</left_joint>
@@ -25,7 +25,7 @@
       <max_wheel_acceleration>1.0</max_wheel_acceleration>
       <robot_base_frame>base_footprint</robot_base_frame>
       <publish_odom>true</publish_odom>
-      <publish_odom_tf>true</publish_odom_tf>
+      <publish_odom_tf>false</publish_odom_tf>
       <publish_wheel_tf>true</publish_wheel_tf>
       <odometry_frame>odom</odometry_frame>
   </plugin>

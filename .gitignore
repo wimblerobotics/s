@@ -52,3 +52,7 @@ CATKIN_IGNORE
 .vscode/c_cpp_properties.json
 .vscode/settings.json
 s_description/models/home/model.sdf
+ira_laser_tools/.gitignore
+ira_laser_tools/.gitmodules
+.gitignore
+.gitignore
