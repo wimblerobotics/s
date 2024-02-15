@@ -5,11 +5,13 @@ import yaml
 import launch
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 import launch_ros.actions
 from launch.substitutions import LaunchConfiguration
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
+    publish_joints = LaunchConfiguration('publish_joints')
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     ld = LaunchDescription()
@@ -17,8 +19,13 @@ def generate_launch_description():
     urdf_path = os.path.join(s_description_directory_path, 'urdf/base.urdf.xacro')
     
     ld.add_action(DeclareLaunchArgument(
+        name='publish_joints', 
+        default_value='true',
+        description='Launch joint_states_publisher of trie'))
+
+    ld.add_action(DeclareLaunchArgument(
         name='use_sim_time', 
-        default_value='false',
+        default_value='true',
         description='Use simulation (Gazebo) clock if true'))
 
     joint_state_configFilePath = os.path.join(
@@ -46,7 +53,7 @@ def generate_launch_description():
         executable='joint_state_publisher',
         name='joint_state_publisher',
         parameters=[joint_state_configParams],
-        condition=launch.conditions.UnlessCondition(use_sim_time)
+        condition=IfCondition(publish_joints)
     )
     ld.add_action(joint_state_publisher_node)
 
