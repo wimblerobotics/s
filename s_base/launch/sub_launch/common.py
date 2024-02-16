@@ -17,7 +17,7 @@ ld = LaunchDescription()
 
 ld.add_action(DeclareLaunchArgument(
     name= 'map', 
-    default_value='map5.yaml',
+    default_value='map6.yaml',
     description='map file to use for navigation'))
 
 ld.add_action(DeclareLaunchArgument(

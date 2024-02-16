@@ -77,19 +77,19 @@ def generate_launch_description():
     )
     common.ld.add_action(description_launch)
 
-    # Bring of the EKF node.
-    start_robot_localization_cmd = launch_ros.actions.Node(
-        package='robot_localization',
-        executable='ekf_node',
-        name='ekf_filter_node',
-        output='screen',
-        parameters=[ 
-            {'use_sim_time': common.use_sim_time},
-            common.ekf_config_path,
-        ],
-        remappings=[("odometry/filtered", "odom")]
-    )
-    common.ld.add_action(start_robot_localization_cmd)
+    # # Bring of the EKF node.
+    # start_robot_localization_cmd = launch_ros.actions.Node(
+    #     package='robot_localization',
+    #     executable='ekf_node',
+    #     name='ekf_filter_node',
+    #     output='screen',
+    #     parameters=[ 
+    #         {'use_sim_time': common.use_sim_time},
+    #         common.ekf_config_path,
+    #     ],
+    #     remappings=[("odometry/filtered", "odom")]
+    # )
+    # common.ld.add_action(start_robot_localization_cmd)
 
     # # Bring up the navigation stack.
     # navigation_launch_path = PathJoinSubstitution(

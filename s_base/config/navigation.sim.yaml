@@ -171,7 +171,7 @@ local_costmap:
     ros__parameters:
       footprint: "[[-0.280, -0.215], [-0.280, 0.215], [0.280, 0.215], [0.280, -0.215]]"
       update_frequency: 5.0
-      publish_frequency: 2.0
+      publish_frequency: 3.0
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: False
@@ -242,7 +242,7 @@ global_costmap:
   global_costmap:
     ros__parameters:
       update_frequency: 5.0
-      publish_frequency: 1.0
+      publish_frequency: 3.0
       global_frame: map
       robot_base_frame: base_link
       use_sim_time: False
