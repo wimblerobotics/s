@@ -241,6 +241,7 @@ local_costmap:
 global_costmap:
   global_costmap:
     ros__parameters:
+      footprint: "[[-0.280, -0.215], [-0.280, 0.215], [0.280, 0.215], [0.280, -0.215]]"
       update_frequency: 5.0
       publish_frequency: 3.0
       global_frame: map
