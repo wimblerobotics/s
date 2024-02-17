@@ -5,7 +5,7 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Text
 import os
 
 # joystick_directory_path = get_package_share_directory('s_bluetooth_joystick')
-# multiplexer_directory_path = get_package_share_directory('twist_multiplexer');
+multiplexer_directory_path = get_package_share_directory('twist_multiplexer');
 s_base_directory_path = get_package_share_directory('s_base')
 s_description_directory_path = get_package_share_directory('s_description')
 # rviz_directory_path = get_package_share_directory('rviz')

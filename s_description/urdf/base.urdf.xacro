@@ -64,19 +64,6 @@ SOFTWARE.
 
     <link name="base_footprint" />
 
-
-    <!--joint name="odom_to_odom_frame_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="odom" />
-        <child link="odom_frame" />
-    </joint> -->
-
-    <!-- joint name="odom_frame_to_t265_pose_frame_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="0 0 0" />> <parent link="odom_frame" />
-        <child
-            link="t265_pose_frame" />
-    </joint> -->
-
     <joint name="base_footprint_joint" type="fixed">
         <origin xyz="0 0 ${base_to_floor_z_offset}" rpy="0 0 0" />
         <parent link="base_footprint" />

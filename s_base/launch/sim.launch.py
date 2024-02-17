@@ -77,43 +77,43 @@ def generate_launch_description():
     )
     common.ld.add_action(description_launch)
 
-    # # Bring of the EKF node.
-    # start_robot_localization_cmd = launch_ros.actions.Node(
-    #     package='robot_localization',
-    #     executable='ekf_node',
-    #     name='ekf_filter_node',
-    #     output='screen',
-    #     parameters=[ 
-    #         {'use_sim_time': common.use_sim_time},
-    #         common.ekf_config_path,
-    #     ],
-    #     remappings=[("odometry/filtered", "odom")]
+    # Bring of the EKF node.
+    start_robot_localization_cmd = launch_ros.actions.Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[ 
+            {'use_sim_time': common.use_sim_time},
+            common.ekf_config_path,
+        ],
+        remappings=[('/odometry/filtered', '/odom')]
+    )
+    common.ld.add_action(start_robot_localization_cmd)
+
+    # Bring up the navigation stack.
+    # navigation_launch_path = PathJoinSubstitution(
+    #     [FindPackageShare('nav2_bringup'), 'launch', 'bringup_launch.py']
     # )
-    # common.ld.add_action(start_robot_localization_cmd)
 
-    # # Bring up the navigation stack.
-    navigation_launch_path = PathJoinSubstitution(
-        [FindPackageShare('nav2_bringup'), 'launch', 'bringup_launch.py']
-    )
+    # nav2_config_path =os.path.join(common.s_base_directory_path, 'config', 'navigation.sim.yaml')
 
-    nav2_config_path =os.path.join(common.s_base_directory_path, 'config', 'navigation.sim.yaml')
+    # nav2_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(navigation_launch_path),
+    #     launch_arguments={
+    #         'map': LaunchConfiguration("map"),
+    #         'use_sim_time': str(use_sim_time),
+    #         'params_file': nav2_config_path
+    #     }.items()
+    # )
+    # common.ld.add_action(nav2_launch)
 
-    nav2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(navigation_launch_path),
-        launch_arguments={
-            'map': LaunchConfiguration("map"),
-            'use_sim_time': str(use_sim_time),
-            'params_file': nav2_config_path
-        }.items()
-    )
-    common.ld.add_action(nav2_launch)
-
-    # # Bring up SLAM.
+    # Bring up SLAM.
     slam_launch_path = PathJoinSubstitution(
         [FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py']
     )
 
-    slam_config_path = os.path.join(common.s_base_directory_path, 'config', 'slam.yaml')        
+    slam_config_path = os.path.join(common.s_base_directory_path, 'config', 'sim.slam.yaml')        
     
     slam_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(slam_launch_path),
