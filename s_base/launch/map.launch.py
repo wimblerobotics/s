@@ -99,17 +99,17 @@ def generate_launch_description():
         [FindPackageShare('nav2_bringup'), 'launch', 'bringup_launch.py']
     )
 
-    nav2_config_path =os.path.join(common.s_base_directory_path, 'config', 'navigation.sim.yaml')
+    # nav2_config_path =os.path.join(common.s_base_directory_path, 'config', 'navigation.sim.yaml')
 
-    nav2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(navigation_launch_path),
-        launch_arguments={
-            'map': LaunchConfiguration("map"),
-            'use_sim_time': str(use_sim_time),
-            'params_file': nav2_config_path
-        }.items()
-    )
-    common.ld.add_action(nav2_launch)
+    # nav2_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(navigation_launch_path),
+    #     launch_arguments={
+    #         'map': LaunchConfiguration("map"),
+    #         'use_sim_time': str(use_sim_time),
+    #         'params_file': nav2_config_path
+    #     }.items()
+    # )
+    # common.ld.add_action(nav2_launch)
 
     # Bring up SLAM.
     slam_launch_path = PathJoinSubstitution(

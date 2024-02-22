@@ -17,7 +17,7 @@ ld = LaunchDescription()
 
 ld.add_action(DeclareLaunchArgument(
     name= 'map', 
-    default_value='map6.yaml',
+    default_value='home_map1.yaml',
     description='map file to use for navigation'))
 
 ld.add_action(DeclareLaunchArgument(
@@ -26,5 +26,4 @@ ld.add_action(DeclareLaunchArgument(
     description='Use simulation (Gazebo) clock if true'))
 
 map = LaunchConfiguration('map')
-map_path = os.path.join(s_base_directory_path,'maps','')
-map_file_name=PathJoinSubstitution([TextSubstitution(text=map_path), map])
+map_path = os.path.join(s_base_directory_path, 'maps', 'home_map1.yaml')
