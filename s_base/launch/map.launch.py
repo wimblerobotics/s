@@ -84,16 +84,10 @@ def generate_launch_description():
             {'use_sim_time': common.use_sim_time},
             common.ekf_config_path,
         ],
-        remappings=[('/odometry/filtered', '/odom'), ('/odom/unfiltered', '/wheel_odom')]
+        remappings=[('/odometry/filtered', 'odom'), ('/odom/unfiltered', 'wheel_odom')]
     )
     common.ld.add_action(start_robot_localization_cmd)
     
-    # # Bring up the OAK-Ds
-    # oakds_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         [common.s_base_directory_path, '/launch/sub_launch/oakds.launch.py']))
-    # common.ld.add_action(oakds_launch)
-
     # Bring up the navigation stack.
     navigation_launch_path = PathJoinSubstitution(
         [FindPackageShare('nav2_bringup'), 'launch', 'bringup_launch.py']

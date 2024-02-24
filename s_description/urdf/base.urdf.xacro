@@ -101,6 +101,11 @@ SOFTWARE.
     <xacro:include filename="$(find s_description)/urdf/time_of_flight.urdf.xacro" />
     <xacro:include filename="$(find s_description)/urdf/sonar.urdf.xacro" />
 
+    <xacro:diff_drive_controller
+        wheel_separation="${body_width * (2 * wheel_center_offset)}"
+        wheel_radius="${wheel_radius}"
+    />
+
     <!-- <xacro:depthai_camera
         camera_name="oakd_left"
         camera_model="OAK-D"
@@ -125,7 +130,7 @@ SOFTWARE.
         cam_pitch="0.0"
         cam_yaw="-0.523599"
     /> -->
-    
+
     <!-- <xacro:oakd_link mount_point="right" />
     <xacro:oakd_joint mount_point="right">
         <origin xyz="0.170 -0.055 0.350" rpy="0 0 -0.523599" />
