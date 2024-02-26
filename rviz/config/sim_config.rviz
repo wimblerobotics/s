@@ -5,17 +5,16 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Grid1
         - /TF1/Tree1
         - /lidar_frame_right_rear1/Topic1
         - /Map1/Topic1
         - /Map1/Update Topic1
         - /Amcl Particle Swarm1/Topic1
-        - /Global Planner1
         - /Odometry1/Topic1
         - /Odometry1/Shape1
         - /Cost cloud1/Topic1
         - /Marker1/Topic1
-        - /PoseWithCovariance1
         - /PoseWithCovariance1/Topic1
       Splitter Ratio: 0.5438972115516663
     Tree Height: 508
@@ -53,7 +52,7 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 10
+      Plane Cell Count: 20
       Reference Frame: <Fixed Frame>
       Value: true
     - Alpha: 0.8999999761581421
@@ -302,7 +301,7 @@ Visualization Manager:
       Axis: Z
       Channel Name: intensity
       Class: rviz_default_plugins/LaserScan
-      Color: 239; 41; 41
+      Color: 245; 194; 17
       Color Transformer: FlatColor
       Decay Time: 0
       Enabled: true
@@ -315,7 +314,7 @@ Visualization Manager:
       Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.019999999552965164
+      Size (m): 0.03999999910593033
       Style: Flat Squares
       Topic:
         Depth: 5
@@ -399,7 +398,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: map
       Draw Behind: true
-      Enabled: false
+      Enabled: true
       Name: Map
       Topic:
         Depth: 1
@@ -415,12 +414,12 @@ Visualization Manager:
         Reliability Policy: Best Effort
         Value: /map_updates
       Use Timestamp: false
-      Value: false
+      Value: true
     - Alpha: 0.20000000298023224
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
       Draw Behind: true
-      Enabled: true
+      Enabled: false
       Name: Global costmap
       Topic:
         Depth: 5
@@ -436,12 +435,12 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /global_costmap/costmap_updates
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
       Draw Behind: false
-      Enabled: true
+      Enabled: false
       Name: Local CostMap
       Topic:
         Depth: 5
@@ -457,7 +456,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /local_costmap/costmap_updates
       Use Timestamp: false
-      Value: true
+      Value: false
     - Class: rviz_common/Group
       Displays:
         - Alpha: 0.5
@@ -1104,12 +1103,12 @@ Visualization Manager:
         Value: /local_plan
       Value: true
     - Class: rviz_default_plugins/Axes
-      Enabled: true
+      Enabled: false
       Length: 1.5
       Name: Odom Axes
       Radius: 0.029999999329447746
       Reference Frame: odom
-      Value: true
+      Value: false
     - Class: rviz_default_plugins/Axes
       Enabled: true
       Length: 1
@@ -1120,7 +1119,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 136; 138; 133
-    Fixed Frame: base_link
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -1154,7 +1153,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -1.5600001811981201
+      Angle: -6.556510925292969e-07
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -1164,11 +1163,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 62.31802749633789
+      Scale: 79.91337585449219
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -0.5237612724304199
-      Y: 4.442397594451904
+      X: 8.325979232788086
+      Y: 6.58551549911499
     Saved: ~
 Window Geometry:
   Displays:
@@ -1192,5 +1191,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1560
-  X: 1818
-  Y: 127
+  X: 378
+  Y: 27

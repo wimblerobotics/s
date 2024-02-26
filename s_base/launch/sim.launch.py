@@ -48,8 +48,8 @@ def generate_launch_description():
         name='urdf_spawner',
         arguments=['-topic', 'robot_description',
                     '-entity', 's_bot',
-                    '-x' , '8', 
-                    '-y', '3',
+                    '-x' , '8.80', 
+                    '-y', '3.0',
         ],
         output='screen'
     )
