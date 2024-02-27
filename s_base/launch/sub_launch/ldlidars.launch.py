@@ -81,8 +81,8 @@ def generate_launch_description():
                     "angle_max": 3.14159,
                     "angle_increment": 0.013935472816228867,
                     "scan_time": 0.010,
-                    "range_min": 0.0504,
-                    "range_max": 20.0
+                    "range_min": 0.0,
+                    "range_max": 10.0
             }],
             # prefix=['xterm -e gdb run -ex --args'],
             # respawn=True,

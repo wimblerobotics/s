@@ -23,31 +23,6 @@ def generate_launch_description():
         default_value='true',
         description='Launch joint_states_publisher if true'))
 
-
-    # Bring up the LIDAR multiplexer
-    lidar_multiplexer = launch_ros.actions.Node(
-            package='ira_laser_tools',
-            executable='laserscan_multi_merger',
-            name='laserscan_multi_merger',
-            parameters=[{
-                    "destination_frame": "base_link",
-                    "cloud_destination_topic": "/merged_lidar_cloud",
-                    "scan_destination_topic": "/scan",
-                    "laserscan_topics": "/scan_left_front /scan_right_rear",
-                    "angle_min": -3.14159,
-                    "angle_max": 3.14159,
-                    "angle_increment": 0.013935472816228867,
-                    "scan_time": 0.010,
-                    "range_min": 0.0504,
-                    "range_max": 20.0,
-                    "max_merge_time_diff": 1000000000.0,
-                    # "allow_scan_delay": use_sim_time, # -- code does not read this properly
-            }],
-            # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
-            output='screen'
-    )
-    ld.add_action(lidar_multiplexer)
-    
     # Bring up the twist multiplexer.
     multiplexer_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(

@@ -19,6 +19,11 @@ SOFTWARE.
 -->
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="material">
 
+    <gazebo reference="base_link">
+        <material>
+            <color rgba="0.516 0.527 0.535 1" />
+        </material>
+    </gazebo>
     <material name="aluminum_frame">
         <color rgba="0.516 0.527 0.535 1" />
     </material>

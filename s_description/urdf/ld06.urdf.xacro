@@ -143,6 +143,10 @@ SOFTWARE.
 
     <gazebo reference="lidar_frame_${lidar_prefix}">
       <sensor name="sensor_ray_${lidar_prefix}" type="ray">
+        <always_on>true</always_on>
+        <update_rate>10</update_rate>
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>true</visualize>
         <ray>
           <scan>
             <horizontal>
@@ -153,27 +157,26 @@ SOFTWARE.
             </horizontal>
           </scan>
           <range>
-            <min>0.05</min>
+            <min>0.08</min>
             <max>10.0</max>
           </range>
-          <noise>
+          <!-- <noise>
             <type>gaussian</type>
             <mean>0.0</mean>
             <stddev>0.02</stddev>
-          </noise>
+          </noise> -->
         </ray>
-        <always_on>true</always_on>
-        <update_rate>10.0</update_rate>
 
         <plugin name="laserscan_${lidar_prefix}" filename="libgazebo_ros_ray_sensor.so">
           <ros>
             <remapping>~/out:=/scan_${lidar_prefix}</remapping>
           </ros>
-          <output_type>sensor_msgs/LaserScan</output_type>
+          <always_on>true</always_on>
           <frame_name>lidar_frame_${lidar_prefix}</frame_name>
-
+          <output_type>sensor_msgs/LaserScan</output_type>
+          <topic_name>/scan_${lidar_prefix}</topic_name>
+          <update_rate>10.0</update_rate>
         </plugin>
-        <visualize>1</visualize>
       </sensor>
       <material>
         Gazebo/Black

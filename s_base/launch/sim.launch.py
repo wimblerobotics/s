@@ -6,7 +6,7 @@ import yaml
 # import launch
 import launch_ros.actions
 # from launch import LaunchDescription
-from launch.actions import ExecuteProcess, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -24,22 +24,22 @@ def generate_launch_description():
 
         
     # Bring up Gazebo.
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-            launch_arguments={
-              'world': os.path.join(common.s_description_directory_path, 'worlds', 'home.world')
-            }.items()
-        )
+    # gazebo = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([os.path.join(
+    #         get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
+    #         launch_arguments={
+    #           'world': os.path.join(common.s_description_directory_path, 'worlds', 'home.world')
+    #         }.items()
+    #     )
     
-    # world_path = PathJoinSubstitution(
-    #     [FindPackageShare("s_description"), "worlds", "home.world"]
-    # )
+    world_path = PathJoinSubstitution(
+        [FindPackageShare("s_description"), "worlds", "home.world"]
+    )
 
-    # gazebo = ExecuteProcess(
-    #         cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so',  '-s', 'libgazebo_ros_init.so', world_path],
-    #         output='screen'
-    # )
+    gazebo = ExecuteProcess(
+            cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so',  '-s', 'libgazebo_ros_init.so', world_path],
+            output='screen'
+    )
     common.ld.add_action(gazebo)
 
     spawn_entity = launch_ros.actions.Node(
@@ -55,6 +55,32 @@ def generate_launch_description():
     )
     common.ld.add_action(spawn_entity)
 
+    # Bring of the EKF node.
+    ekf_filter_node = launch_ros.actions.Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[ 
+            {'use_sim_time': use_sim_time},
+            common.ekf_config_path,
+        ],
+        remappings=[('odometry/filtered', 'odom')]
+    )
+    common.ld.add_action(ekf_filter_node)
+
+    # Bring up the robot description (URDF).
+    description_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            common.s_description_directory_path, '/launch/description.launch.py'
+        ]),
+        launch_arguments={
+            'use_sim_time': str(use_sim_time),
+            'publish_joints': 'false'
+        }.items()
+    )
+    common.ld.add_action(description_launch)
+
     # Bring up the LIDAR multiplexer
     lidar_multiplexer = launch_ros.actions.Node(
             package='ira_laser_tools',
@@ -69,8 +95,8 @@ def generate_launch_description():
                     "angle_max": 3.14159,
                     "angle_increment": 0.013935472816228867,
                     "scan_time": 0.010,
-                    "range_min": 0.0504,
-                    "range_max": 20.0,
+                    "range_min": 0.0,
+                    "range_max": 10.0,
                     "max_merge_time_diff": 1000000000.0,
                     # "allow_scan_delay": use_sim_time, # -- code does not read this properly
             }],
@@ -79,42 +105,15 @@ def generate_launch_description():
     )
     common.ld.add_action(lidar_multiplexer)
 
-    
-    # Bring of the EKF node.
-    start_robot_localization_cmd = launch_ros.actions.Node(
-        package='robot_localization',
-        executable='ekf_node',
-        name='ekf_filter_node',
-        output='screen',
-        parameters=[ 
-            {'use_sim_time': use_sim_time},
-            common.ekf_config_path,
-        ],
-        remappings=[('odometry/filtered', 'odom')]
-    )
-    common.ld.add_action(start_robot_localization_cmd)
-
-    # Bring up the robot description (URDF).
-    description_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            common.s_description_directory_path, '/launch/description.launch.py'
-        ]),
-        launch_arguments={
-            'use_sim_time': str(use_sim_time),
-            'publish_joints': 'false'
-        }.items()
-    )
-    common.ld.add_action(description_launch)
-
     # Bring up the navigation stack.
-    navigation_launch_path = PathJoinSubstitution(
+    nav2_launch_path = PathJoinSubstitution(
         [FindPackageShare('nav2_bringup'), 'launch', 'bringup_launch.py']
     )
 
     nav2_config_path =os.path.join(common.s_base_directory_path, 'config', 'navigation.yaml')
 
     nav2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(navigation_launch_path),
+        PythonLaunchDescriptionSource(nav2_launch_path),
         launch_arguments={
             'map': common.map_path,
             'use_sim_time': str(use_sim_time),
