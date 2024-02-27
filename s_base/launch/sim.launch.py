@@ -123,20 +123,19 @@ def generate_launch_description():
     common.ld.add_action(nav2_launch)
 
     # Bring up SLAM.
-    # slam_launch_path = PathJoinSubstitution(
-    #     [FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py']
-    # )
+    slam_launch_path = PathJoinSubstitution(
+        [FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py']
+    )
 
-    # slam_config_path = os.path.join(common.s_base_directory_path, 'config', 'sim.slam.yaml')        
+    slam_config_path = os.path.join(common.s_base_directory_path, 'config', 'slam.yaml')        
     
-    # slam_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(slam_launch_path),
-    #     launch_arguments={
-    #         'use_sim_time': str(use_sim_time),
-    #         'slam_params_file': slam_config_path
-    #     }.items()
-    # )
-    # common.ld.add_action(slam_launch)
-
+    slam_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(slam_launch_path),
+        launch_arguments={
+            'use_sim_time': str(use_sim_time),
+            'slam_params_file': slam_config_path
+        }.items()
+    )
+    common.ld.add_action(slam_launch)
 
     return common.ld
