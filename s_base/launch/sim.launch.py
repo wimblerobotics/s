@@ -7,6 +7,7 @@ import yaml
 import launch_ros.actions
 # from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -21,17 +22,13 @@ import common
 def generate_launch_description():
 
     use_sim_time = True
-
-        
-    # Bring up Gazebo.
-    # gazebo = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource([os.path.join(
-    #         get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-    #         launch_arguments={
-    #           'world': os.path.join(common.s_description_directory_path, 'worlds', 'home.world')
-    #         }.items()
-    #     )
     
+    do_mapping = LaunchConfiguration('do_mapping')
+    common.ld.add_action(DeclareLaunchArgument(
+        name='do_mapping', 
+        default_value='false',
+        description='true=>use slam_toolbox to map, false=>use AMCL to localize'))
+
     world_path = PathJoinSubstitution(
         [FindPackageShare("s_description"), "worlds", "home.world"]
     )
@@ -118,7 +115,8 @@ def generate_launch_description():
             'map': common.map_path,
             'use_sim_time': str(use_sim_time),
             'params_file': nav2_config_path
-        }.items()
+        }.items(),
+        condition=UnlessCondition(do_mapping)
     )
     common.ld.add_action(nav2_launch)
 
@@ -134,7 +132,8 @@ def generate_launch_description():
         launch_arguments={
             'use_sim_time': str(use_sim_time),
             'slam_params_file': slam_config_path
-        }.items()
+        }.items(),
+        condition=IfCondition(do_mapping)
     )
     common.ld.add_action(slam_launch)
 
