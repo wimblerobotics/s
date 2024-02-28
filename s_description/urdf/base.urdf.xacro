@@ -55,10 +55,9 @@ SOFTWARE.
                 izz="${(1/12) * mass * ((body_length * body_length) + (body_width  * body_width))}" />
         </inertial>
     </link>
-    <gazebo
-        reference="base_link">
-        <material>
-            aluminum_frame
+    <gazebo reference="base_link">
+        <material name="aluminum_frame">
+            <color rgba="0.516 0.527 0.535 1" />
         </material>
     </gazebo>
 
