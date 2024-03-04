@@ -45,7 +45,7 @@ def generate_launch_description():
         name='urdf_spawner',
         arguments=['-topic', 'robot_description',
                     '-entity', 's_bot',
-                    '-x' , '8.80', 
+                    '-x' , '8.0', 
                     '-y', '3.0',
         ],
         output='screen'
@@ -79,28 +79,28 @@ def generate_launch_description():
     common.ld.add_action(description_launch)
 
     # Bring up the LIDAR multiplexer
-    lidar_multiplexer = launch_ros.actions.Node(
-            package='ira_laser_tools',
-            executable='laserscan_multi_merger',
-            name='laserscan_multi_merger',
-            parameters=[{
-                    "destination_frame": "base_link",
-                    "cloud_destination_topic": "/merged_lidar_cloud",
-                    "scan_destination_topic": "/scan",
-                    "laserscan_topics": "/scan_left_front /scan_right_rear",
-                    "angle_min": -3.14159,
-                    "angle_max": 3.14159,
-                    "angle_increment": 0.013935472816228867,
-                    "scan_time": 0.010,
-                    "range_min": 0.0,
-                    "range_max": 10.0,
-                    "max_merge_time_diff": 1000000000.0,
-                    # "allow_scan_delay": use_sim_time, # -- code does not read this properly
-            }],
-            # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
-            output='screen'
-    )
-    common.ld.add_action(lidar_multiplexer)
+    # lidar_multiplexer = launch_ros.actions.Node(
+    #         package='ira_laser_tools',
+    #         executable='laserscan_multi_merger',
+    #         name='laserscan_multi_merger',
+    #         parameters=[{
+    #                 "destination_frame": "base_link",
+    #                 "cloud_destination_topic": "/merged_lidar_cloud",
+    #                 "scan_destination_topic": "/scan",
+    #                 "laserscan_topics": "/scan_left_front /scan_right_rear",
+    #                 "angle_min": -3.14159,
+    #                 "angle_max": 3.14159,
+    #                 "angle_increment": 0.013935472816228867,
+    #                 "scan_time": 0.010,
+    #                 "range_min": 0.0,
+    #                 "range_max": 10.0,
+    #                 "max_merge_time_diff": 1000000000.0,
+    #                 # "allow_scan_delay": use_sim_time, # -- code does not read this properly
+    #         }],
+    #         # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
+    #         output='screen'
+    # )
+    # common.ld.add_action(lidar_multiplexer)
 
     # Bring up the navigation stack.
     nav2_launch_path = PathJoinSubstitution(

@@ -17,6 +17,10 @@
   <xacro:property name="t265_x_offset" value="0.2126" />
   <xacro:property name="wheel_radius" value="0.10" />
   <xacro:property name="wheel_center_offset" value="0.030" />
+  <xacro:property name="wheel_mass" value=".1" />
+  <xacro:property name="wheel_pos_x" value="0.0" />
+  <xacro:property name="wheel_pos_y" value="${(body_width/2)+wheel_center_offset}" />
+  <xacro:property name="wheel_pos_z" value="-${gear_box_center_height}" />
   <xacro:property name="wheel_width" value="0.0254" />
 
   <xacro:property name="base_to_floor_z_offset" value="${wheel_radius+gear_box_center_height}" />

@@ -17,41 +17,57 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<robot xmlns:xacro="http://ros.org/wiki/xacro" name="caster">
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+	<xacro:macro name="caster_wheel" params="side mass">
+		<xacro:property name="caster_wheel_radius" value="0.0381" />
+		<xacro:if value="${side == 'front'}">
+			<xacro:property name="caster_wheel_x" value="${fwheel_offset}" />
+		</xacro:if>
 
-	<xacro:macro name="caster" params="wheel_prefix *joint_pose">
-		<link name="${wheel_prefix}_wheel_link">
-			<collision>
-				<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+		<xacro:if value="${side == 'rear'}">
+			<xacro:property name="caster_wheel_x" value="${-fwheel_offset}" />
+		</xacro:if>
+
+		<link name="${side}_caster_wheel_link">
+			<visual>
+				<origin xyz="0 0 0" rpy="0 0 0" />
 				<geometry>
-					<cylinder length="${caster_width}" radius="${caster_radius}" />
+					<sphere radius="${caster_wheel_radius}" />
+				</geometry>
+				<material name="red">
+					<color rgba="0.416 0.051 0.047 1.0" />
+				</material>
+			</visual>
+
+			<collision>
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<geometry>
+					<sphere radius="${caster_wheel_radius}" />
 				</geometry>
 			</collision>
+
 			<inertial>
-				<mass value="0.01" />
-				<origin xyz="0 0 0" />
-				<inertia ixx="0.02467" ixy="0" ixz="0" iyy="0.04411" iyz="0" izz="0.02467" />
+				<origin xyz="0 0 0" rpy="0 0 0" />
+				<mass value="${mass}" />
+				<inertia ixx="${(2/5) * mass * (caster_wheel_radius * caster_wheel_radius)}" ixy="0"
+					ixz="0"
+					iyy="${(2/5) * mass * (caster_wheel_radius * caster_wheel_radius)}" iyz="0"
+					izz="${(2/5) * mass * (caster_wheel_radius * caster_wheel_radius)}" />
 			</inertial>
-			<visual>
-				<geometry>
-					<cylinder length="${caster_width}" radius="${caster_radius}" />
-				</geometry>
-				<material name="caster_wheel_material" />
-				<origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
-			</visual>
 		</link>
 
-		<joint name="${wheel_prefix}_wheel" type="fixed">
-			<parent link="base_link" />
-			<child link="${wheel_prefix}_wheel_link" />
-			<xacro:insert_block name="joint_pose" />
-		</joint>
-
-		<gazebo reference="${wheel_prefix}_wheel_link">
-			<mu1>0.00001</mu1>
-			<mu2>0.00001</mu2>
+		<gazebo reference="${side}_caster_wheel_link">
+			<mu1>0.01</mu1>
+			<mu2>0.01</mu2>
 			<material>Gazebo/Red</material>
 		</gazebo>
 
+		<joint name="${side}_caster_wheel_joint" type="fixed">
+			<parent link="base_link" />
+			<child link="${side}_caster_wheel_link" />
+			<origin
+				xyz="${caster_wheel_x} 0 -${wheel_radius + gear_box_center_height - caster_wheel_radius}"
+				rpy="0 0 0" />
+		</joint>
 	</xacro:macro>
 </robot>
