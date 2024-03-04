@@ -170,7 +170,7 @@ SOFTWARE.
 
         <plugin name="laserscan_${lidar_prefix}" filename="libgazebo_ros_ray_sensor.so">
           <ros>
-            <remapping>~/out:=/scan</remapping>
+            <remapping>~/out:=/scan_${lidar_prefix}</remapping>
           </ros>
           <always_on>true</always_on>
           <frame_name>lidar_frame_${lidar_prefix}</frame_name>

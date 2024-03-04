@@ -79,28 +79,28 @@ def generate_launch_description():
     common.ld.add_action(description_launch)
 
     # Bring up the LIDAR multiplexer
-    # lidar_multiplexer = launch_ros.actions.Node(
-    #         package='ira_laser_tools',
-    #         executable='laserscan_multi_merger',
-    #         name='laserscan_multi_merger',
-    #         parameters=[{
-    #                 "destination_frame": "base_link",
-    #                 "cloud_destination_topic": "/merged_lidar_cloud",
-    #                 "scan_destination_topic": "/scan",
-    #                 "laserscan_topics": "/scan_left_front /scan_right_rear",
-    #                 "angle_min": -3.14159,
-    #                 "angle_max": 3.14159,
-    #                 "angle_increment": 0.013935472816228867,
-    #                 "scan_time": 0.010,
-    #                 "range_min": 0.0,
-    #                 "range_max": 10.0,
-    #                 "max_merge_time_diff": 1000000000.0,
-    #                 # "allow_scan_delay": use_sim_time, # -- code does not read this properly
-    #         }],
-    #         # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
-    #         output='screen'
-    # )
-    # common.ld.add_action(lidar_multiplexer)
+    lidar_multiplexer = launch_ros.actions.Node(
+            package='ira_laser_tools',
+            executable='laserscan_multi_merger',
+            name='laserscan_multi_merger',
+            parameters=[{
+                    "destination_frame": "base_link",
+                    "cloud_destination_topic": "/merged_lidar_cloud",
+                    "scan_destination_topic": "/scan",
+                    "laserscan_topics": "/scan_left_front /scan_right_rear",
+                    "angle_min": -3.14159,
+                    "angle_max": 3.14159,
+                    "angle_increment": 0.013935472816228867,
+                    "scan_time": 0.010,
+                    "range_min": 0.0,
+                    "range_max": 10.0,
+                    "max_merge_time_diff": 1000000000.0,
+                    # "allow_scan_delay": use_sim_time, # -- code does not read this properly
+            }],
+            # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
+            output='screen'
+    )
+    common.ld.add_action(lidar_multiplexer)
 
     # Bring up the navigation stack.
     nav2_launch_path = PathJoinSubstitution(
@@ -138,3 +138,19 @@ def generate_launch_description():
     common.ld.add_action(slam_launch)
 
     return common.ld
+# Copyright (c) 2024 Michael Wimble
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
