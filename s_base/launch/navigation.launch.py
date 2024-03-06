@@ -38,7 +38,8 @@ def generate_launch_description():
 
     # Bring up the navigation stack.
     default_map_path = PathJoinSubstitution(
-        [FindPackageShare('s_base'), 'maps', 'map6.yaml']
+        # [FindPackageShare('s_base'), 'maps', 'map6.yaml']
+        [FindPackageShare('s_base'), 'maps', 'map5.yaml']
     )
 
     navigation_launch_path = PathJoinSubstitution(

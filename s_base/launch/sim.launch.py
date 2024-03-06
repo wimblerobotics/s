@@ -92,7 +92,7 @@ def generate_launch_description():
                     "angle_max": 3.14159,
                     "angle_increment": 0.013935472816228867,
                     "scan_time": 0.010,
-                    "range_min": 0.0,
+                    "range_min": 0.1,
                     "range_max": 10.0,
                     "max_merge_time_diff": 1000000000.0,
                     # "allow_scan_delay": use_sim_time, # -- code does not read this properly
@@ -125,19 +125,30 @@ def generate_launch_description():
         [FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py']
     )
 
-    slam_config_path = os.path.join(common.s_base_directory_path, 'config', 'slam.yaml')        
+    # slam_config_path = os.path.join(common.s_base_directory_path, 'config', 'slam.yaml')        
     
-    slam_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(slam_launch_path),
-        launch_arguments={
-            'use_sim_time': str(use_sim_time),
-            'slam_params_file': slam_config_path
-        }.items(),
+    # # slam_launch = IncludeLaunchDescription(
+    # #     PythonLaunchDescriptionSource(slam_launch_path),
+    # #     launch_arguments={
+    # #         'use_sim_time': 'true', #str(use_sim_time),
+    # #         'slam_params_file': slam_config_path
+    # #     }.items(),
+    # #     condition=IfCondition(do_mapping)
+    # # )
+    # # common.ld.add_action(slam_launch)
+
+    cart_launch_path = PathJoinSubstitution(
+        [FindPackageShare('s_base'), 'launch', 'cartographer.launch.py']
+    )
+    cartographer_config_dir = [FindPackageShare('s_base'), 'config', 'turtlebot3_lds_2d.lua']
+    cart_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([cart_launch_path]),
         condition=IfCondition(do_mapping)
     )
-    common.ld.add_action(slam_launch)
-
+    common.ld.add_action(cart_launch)
+    
     return common.ld
+
 # Copyright (c) 2024 Michael Wimble
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
