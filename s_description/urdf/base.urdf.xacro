@@ -56,8 +56,8 @@ SOFTWARE.
         </inertial>
     </link>
     <gazebo reference="base_link">
-        <material name="aluminum_frame">
-            <color rgba="0.516 0.527 0.535 1" />
+        <material>
+            Gazebo/Grey
         </material>
     </gazebo>
 
@@ -99,7 +99,8 @@ SOFTWARE.
     />
 
     <xacro:ld06 lidar_prefix="right_rear">
-        <origin xyz="${-(body_length / 2) - 0.030}  -${((body_width / 2) - 0)} 0.200" rpy="0 0 ${M_PI}" />
+        <origin xyz="${-(body_length / 2) - 0.030}  -${((body_width / 2) - 0)} 0.200"
+            rpy="0 0 ${M_PI}" />
     </xacro:ld06>
 
     <xacro:ld06 lidar_prefix="left_front">
