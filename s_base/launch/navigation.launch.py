@@ -20,26 +20,22 @@ import common
 
 def generate_launch_description():
 
-    use_sim_time = False
-
     base_launch_path = PathJoinSubstitution(
         [FindPackageShare('s_base'), 'launch', 'sub_launch', 'base.launch.py']
     )
 
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(base_launch_path),
-        # launch_arguments={
-        #     'map': default_map_path,
-        #     'use_sim_time': str(use_sim_time),
-        #     'params_file': nav2_config_path
-        # }.items()
+        launch_arguments={
+            'publish_joints': 'true',
+        }.items()
     )
     common.ld.add_action(base_launch)
 
     # Bring up the navigation stack.
     default_map_path = PathJoinSubstitution(
         # [FindPackageShare('s_base'), 'maps', 'map6.yaml']
-        [FindPackageShare('s_base'), 'maps', 'map5.yaml']
+        [FindPackageShare('s_base'), 'maps', 'map_20240306.yaml']
     )
 
     navigation_launch_path = PathJoinSubstitution(
@@ -51,9 +47,13 @@ def generate_launch_description():
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(navigation_launch_path),
         launch_arguments={
+            'autostart': 'True',
             'map': default_map_path,
-            'use_sim_time': str(use_sim_time),
-            'params_file': nav2_config_path
+            'params_file': nav2_config_path,
+            # 'slam': 'false',
+            'use_composition': 'True',
+            'use_respawn': 'True',
+            # 'use_sim_time': 'false',
         }.items()
     )
     common.ld.add_action(nav2_launch)

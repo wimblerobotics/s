@@ -1,4 +1,4 @@
-image: map_20240306b.pgm
+image: map_20240306c.pgm
 mode: trinary
 resolution: 0.0254
 origin: [-12.3, -7.81, 0]
