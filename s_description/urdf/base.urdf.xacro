@@ -98,14 +98,28 @@ SOFTWARE.
         mass="0.01"
     />
 
-    <xacro:ld06 lidar_prefix="right_rear">
+    <link name="scan" />
+    <joint name="base_to_scan" type="fixed">
+      <parent link="base_link" />
+      <child link="scan" />
+      <origin xyz="-0.035  -0.070 0.430" rpy="0 0 ${M_PI}" />
+    </joint>
+    <xacro:ld06 lidar_prefix="top_lidar">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:ld06>
+    <joint name="base_to_lidar_frame_top_lidar" type="fixed">
+      <parent link="scan" />
+      <child link="lidar_frame_top_lidar" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+    <!-- <xacro:ld06 lidar_prefix="right_rear">
         <origin xyz="${-(body_length / 2) - 0.030}  -${((body_width / 2) - 0)} 0.200"
             rpy="0 0 ${M_PI}" />
     </xacro:ld06>
 
     <xacro:ld06 lidar_prefix="left_front">
         <origin xyz="${(body_length / 2) + 0.030}  ${((body_width / 2) - 0.0)} 0.040" rpy="0 0 0" />
-    </xacro:ld06>
+    </xacro:ld06> -->
 
     <xacro:include filename="$(find s_description)/urdf/time_of_flight.urdf.xacro" />
     <xacro:include filename="$(find s_description)/urdf/sonar.urdf.xacro" />

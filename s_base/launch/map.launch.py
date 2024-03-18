@@ -20,19 +20,15 @@ import common
 
 def generate_launch_description():
 
-    use_sim_time = False
-
     base_launch_path = PathJoinSubstitution(
         [FindPackageShare('s_base'), 'launch', 'sub_launch', 'base.launch.py']
     )
 
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(base_launch_path),
-        # launch_arguments={
-        #     'map': default_map_path,
-        #     'use_sim_time': str(use_sim_time),
-        #     'params_file': nav2_config_path
-        # }.items()
+        launch_arguments={
+            'publish_joints': 'true',
+        }.items()
     )
     common.ld.add_action(base_launch)
 
@@ -46,7 +42,7 @@ def generate_launch_description():
     slam_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(slam_launch_path),
         launch_arguments={
-            'use_sim_time': str(use_sim_time),
+            'use_sim_time':'False',
             'slam_params_file': slam_config_path
         }.items()
     )

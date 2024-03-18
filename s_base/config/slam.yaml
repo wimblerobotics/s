@@ -41,12 +41,12 @@ slam_toolbox:
     # General Parameters
     use_scan_matching: True
     use_scan_barycenter: True
-    minimum_travel_distance: 0.1
-    minimum_travel_heading: 0.069812667 # 4 degrees
+    minimum_travel_distance: 0.05
+    minimum_travel_heading: 0.03 # 4 degrees
     scan_buffer_size: 20 # 10
     scan_buffer_maximum_scan_distance: 10.0
     link_match_minimum_response_fine: 0.1  
-    link_scan_maximum_distance: 3.0
+    link_scan_maximum_distance: 5.0
     loop_search_maximum_distance: 10.0 # 5.0
     do_loop_closing: True 
     loop_match_minimum_chain_size: 10           

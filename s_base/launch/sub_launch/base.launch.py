@@ -42,11 +42,17 @@ def generate_launch_description():
     )
     ld.add_action(description_launch)
 
-    # Bring up the LIDARs.
+    # Bring up the LIDAR.
     lidars_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [s_base_directory_path, '/launch/sub_launch/ldlidars.launch.py']))
+            [s_base_directory_path, '/launch/sub_launch/single_lidar.launch.py']))
     ld.add_action(lidars_launch)
+    
+    # # Bring up the LIDARs.
+    # lidars_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         [s_base_directory_path, '/launch/sub_launch/ldlidars.launch.py']))
+    # ld.add_action(lidars_launch)
 
    
     # Bring of the EKF node.
