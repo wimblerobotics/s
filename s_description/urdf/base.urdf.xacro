@@ -34,7 +34,8 @@ SOFTWARE.
             <geometry>
                 <box size="${body_length} ${body_width} ${body_height}" />
             </geometry>
-            <origin rpy="0 0 0" xyz="0 0 ${(body_height/2)}" />
+            <origin rpy="0 0 0"
+                xyz="${(-body_length/2)+wheel_offset_from_front} 0 ${(body_height/2)}" />
         </collision>
         <visual>
             <geometry>
