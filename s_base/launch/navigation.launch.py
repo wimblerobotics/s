@@ -50,7 +50,7 @@ def generate_launch_description():
             'autostart': 'True',
             'map': default_map_path,
             'params_file': nav2_config_path,
-            # 'slam': 'false',
+            'slam': 'False',
             'use_composition': 'True',
             'use_respawn': 'True',
             # 'use_sim_time': 'false',
