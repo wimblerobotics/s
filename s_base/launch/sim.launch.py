@@ -33,12 +33,14 @@ def generate_launch_description():
         [FindPackageShare("s_description"), "worlds", "home.world"]
     )
 
+    # Bring up gazebo
     gazebo = ExecuteProcess(
             cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so',  '-s', 'libgazebo_ros_init.so', world_path],
             output='screen'
     )
     common.ld.add_action(gazebo)
 
+    # Bring up the robot model
     spawn_entity = launch_ros.actions.Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
@@ -51,6 +53,21 @@ def generate_launch_description():
         output='screen'
     )
     common.ld.add_action(spawn_entity)
+
+    # Republish /scan_top_lidar to /scan
+    scan_pub = launch_ros.actions.Node(
+        package='topic_tools',
+        executable='relay',
+        name='scan_top_lidar_to_scan',
+        # arguments=['-input_topic', '/scan_top_lidar', '-output_topic', '/scan]']
+        parameters=[
+            {
+                'input_topic': "/scan_top_lidar",
+                'output_topic': "/scan"
+            }
+        ]
+    )
+    common.ld.add_action(scan_pub)
 
     # Bring of the EKF node.
     ekf_filter_node = launch_ros.actions.Node(
@@ -78,29 +95,29 @@ def generate_launch_description():
     )
     common.ld.add_action(description_launch)
 
-    # Bring up the LIDAR multiplexer
-    lidar_multiplexer = launch_ros.actions.Node(
-            package='ira_laser_tools',
-            executable='laserscan_multi_merger',
-            name='laserscan_multi_merger',
-            parameters=[{
-                    "destination_frame": "base_link",
-                    "cloud_destination_topic": "/merged_lidar_cloud",
-                    "scan_destination_topic": "/scan",
-                    "laserscan_topics": "/scan_left_front /scan_right_rear",
-                    "angle_min": -3.14159,
-                    "angle_max": 3.14159,
-                    "angle_increment": 0.013935472816228867,
-                    "scan_time": 0.010,
-                    "range_min": 0.1,
-                    "range_max": 10.0,
-                    "max_merge_time_diff": 1000000000.0,
-                    # "allow_scan_delay": use_sim_time, # -- code does not read this properly
-            }],
-            # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
-            output='screen'
-    )
-    common.ld.add_action(lidar_multiplexer)
+    # # Bring up the LIDAR multiplexer
+    # lidar_multiplexer = launch_ros.actions.Node(
+    #         package='ira_laser_tools',
+    #         executable='laserscan_multi_merger',
+    #         name='laserscan_multi_merger',
+    #         parameters=[{
+    #                 "destination_frame": "base_link",
+    #                 "cloud_destination_topic": "/merged_lidar_cloud",
+    #                 "scan_destination_topic": "/scan",
+    #                 "laserscan_topics": "/scan_left_front /scan_right_rear",
+    #                 "angle_min": -3.14159,
+    #                 "angle_max": 3.14159,
+    #                 "angle_increment": 0.013935472816228867,
+    #                 "scan_time": 0.010,
+    #                 "range_min": 0.1,
+    #                 "range_max": 10.0,
+    #                 "max_merge_time_diff": 1000000000.0,
+    #                 # "allow_scan_delay": use_sim_time, # -- code does not read this properly
+    #         }],
+    #         # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
+    #         output='screen'
+    # )
+    # common.ld.add_action(lidar_multiplexer)
 
     # Bring up the navigation stack.
     nav2_launch_path = PathJoinSubstitution(
