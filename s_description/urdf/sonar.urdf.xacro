@@ -22,7 +22,7 @@ SOFTWARE.
     <xacro:property name="front_edge" value="${wheel_offset_from_front}" />
     <xacro:property name="case_left_edge" value="${body_width/2}" />
     <xacro:property name="case_right_edge" value="-${body_width/2}" />
-    <xacro:property name="sonar_depth" value="0.020" />
+    <xacro:property name="sonar_depth" value="0.008" />
     <xacro:property name="sonar_height" value="0.030" />
     <xacro:property name="sonar_width" value="0.050" />
     <xacro:property name="sonar_z_offset" value="0.173" />
@@ -51,21 +51,21 @@ SOFTWARE.
     </xacro:macro>
 
     <xacro:sonar_unit number="0">
-        <origin xyz="${front_edge+(sonar_depth/2)} 0 ${(sonar_height/2)+sonar_z_offset}" rpy="0 0 0" />
+        <origin xyz="${front_edge+0.04} 0 ${(sonar_height/2)+sonar_z_offset}" rpy="0 0 0" />
     </xacro:sonar_unit>
 
     <xacro:sonar_unit number="1">
-        <origin xyz="0 ${case_left_edge+(sonar_depth/2)} ${(sonar_height/2)+sonar_z_offset}"
+        <origin xyz="0 ${case_left_edge+0.015} ${(sonar_height/2)+sonar_z_offset}"
             rpy="0 0 ${M_PI / 2}" />
     </xacro:sonar_unit>
 
     <xacro:sonar_unit number="2">
-        <origin xyz="0 ${case_right_edge-(sonar_depth/2)} ${(sonar_height/2)+sonar_z_offset}"
+        <origin xyz="0 ${case_right_edge-0.005} ${(sonar_height/2)+sonar_z_offset}"
             rpy="0 0 -${M_PI / 2}" />
     </xacro:sonar_unit>
 
     <xacro:sonar_unit number="3">
-        <origin xyz="${back_edge-(sonar_depth/2)} 0 ${(sonar_height/2)+sonar_z_offset}"
+        <origin xyz="${back_edge+0.020} 0 ${(sonar_height/2)+sonar_z_offset}"
             rpy="0 0 ${M_PI}" />
     </xacro:sonar_unit>
 
