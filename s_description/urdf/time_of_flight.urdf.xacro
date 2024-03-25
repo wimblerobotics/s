@@ -63,37 +63,37 @@ SOFTWARE.
 
     <xacro:tof_unit number="2">
         <origin
-            xyz="${front_edge-(tof_width/2 + 0.020)} ${case_left_edge+(tof_depth/2)} ${(tof_height/2)+tof_z_offset}"
+            xyz="${front_edge-(tof_width/2 + 0.020)} ${case_left_edge-0.025} ${(tof_height/2)+tof_z_offset}"
             rpy="0 0 ${M_PI / 2}" />
     </xacro:tof_unit>
 
     <xacro:tof_unit number="3">
         <origin
-            xyz="${front_edge-(tof_width/2 + 0.020)} ${case_right_edge-(tof_depth/2)} ${(tof_height/2)+tof_z_offset}"
+            xyz="${front_edge-(tof_width/2 + 0.020)} ${case_right_edge+0.065} ${(tof_height/2)+tof_z_offset}"
             rpy="0 0 -${M_PI / 2}" />
     </xacro:tof_unit>
 
     <xacro:tof_unit number="4">
         <origin
-            xyz="${back_edge+(tof_width/2) + 0.020} ${case_left_edge+(tof_depth/2)} ${(tof_height/2)+tof_z_offset}"
+            xyz="${back_edge+(tof_width/2) + 0.020} ${case_left_edge-0.025} ${(tof_height/2)+tof_z_offset}"
             rpy="0 0 ${M_PI / 2}" />
     </xacro:tof_unit>
 
     <xacro:tof_unit number="5">
         <origin
-            xyz="${back_edge+(tof_width/2) + 0.020} ${case_right_edge-(tof_depth/2)} ${(tof_height/2)+tof_z_offset}"
+            xyz="${back_edge+(tof_width/2) + 0.020} ${case_right_edge+0.065} ${(tof_height/2)+tof_z_offset}"
             rpy="0 0 -${M_PI / 2}" />
     </xacro:tof_unit>
 
     <xacro:tof_unit number="6">
         <origin
-            xyz="${back_edge-(tof_depth/2)} ${case_left_edge-(tof_width/2) - 0.020} ${(tof_height/2)+tof_z_offset}"
+            xyz="${back_edge+0.065} ${case_left_edge-(tof_width/2) - 0.020} ${(tof_height/2)+tof_z_offset}"
             rpy="0 0 -${M_PI}" />
     </xacro:tof_unit>
 
     <xacro:tof_unit number="7">
         <origin
-            xyz="${back_edge-(tof_depth/2)} ${case_right_edge+(tof_width/2) + 0.020} ${(tof_height/2)+tof_z_offset}"
+            xyz="${back_edge+0.065} ${case_right_edge+(tof_width/2) + 0.020} ${(tof_height/2)+tof_z_offset}"
             rpy="0 0 -${M_PI}" />
     </xacro:tof_unit>
 
