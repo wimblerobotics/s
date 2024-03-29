@@ -2,123 +2,64 @@ from datetime import datetime
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
+from rclpy.time import Time
 
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import numpy as np
 from sensor_msgs.msg._range import Range
 from std_msgs.msg import String
 
-class MinimalSubscriber(Node):
+class ShowTimeSkew(Node):
+
+    def reset_measurements(self):
+        self.start_time_ns_ = self.get_clock().now().nanoseconds
+        self.callback_count_ = 0
+        self.min_skew_ = 1.0e9
+        self.max_skew_ = -1.0e9
+        self.start_callback_count_ = 0;
+        self.total_skew_ = 0.0
 
     def __init__(self):
         super().__init__('show_time_skew')
-        self.declare_parameter('topic', rclpy.Parameter.Type.STRING))
-        self.start_time_ = datetime.now()
-        self.callback_count_ = 0
-
-        # # These are the title strings shown per sensor histogram.
-        # # They are a shortcut, for me, as to the physical position of the corresponding sensor.
-        # # The 'X" shows where the sensor is located. 
-        # # The '<' and '>' show whether the sensor is on the left or right side of the robot frame.
-        # # The '^' and 'v' show whether the sensor is on the front or rear of the robot frame.
-        # self.sensor_names = [['X<^-', '-<^X', 'X^>-', '-^>X'],
-        #                      ['X<v-', '-<vX', 'Xv>-', '-v>X']]
-        # self.number_sensors = 8 # There are 8 sensors.
-        # self.number_values_to_cache = 20 # I want to show the variance over this number of the last readings.
-        # self.last_n_values_per_sensor = np.zeros(
-        #     (self.number_sensors, self.number_values_to_cache), dtype='float')
-        # self.next_index_number = np.zeros((self.number_sensors), dtype='int32')
-
-        # # Create an array of histograms.
-        # # Two rows for front vs back of robot.
-        # # Four columns for left-sideways, left-front-or-back, right-front-or-back, right-sideways position.
-        # self.figure, self.axis = plt.subplots(
-        #     nrows=2, ncols=4, sharex=False, sharey=False, squeeze=False, figsize=(8, 2))
-        
-        # # Set the window title.
-        # self.figure.canvas.set_window_title('Time Of Flight Sensors step')
-
-        # # Create the x-axis values. I'm interested in only ranges from 0.00 to 1.00 meters.
-        # self.bins = [x / 100.0 for x in range(100)]
-
-        # # Make it all look pretty.
-        # plt.subplots_adjust(hspace=0.6)
-        # plt.autoscale(enable=True, axis='both', tight=True)
-        # plt.rcParams['lines.linewidth'] = 1
-
-        # Set up the ROS 2 quality of service in order to read the sensor data.
+        self.declare_parameter('topic', 'need_topic_name')
+        self.reset_measurements()
         qos_profile = QoSProfile(
             reliability=QoSReliabilityPolicy.BEST_EFFORT,
             history=QoSHistoryPolicy.KEEP_LAST,
             depth=1
         )
         
-        # Subscribe to the topics.
+        # Subscribe to the topic.
+        topic_name = self.get_parameter('topic').get_parameter_value().string_value
+        self.get_logger().info(f'Subscrbing to topic: {topic_name}')
         self.subscription = self.create_subscription(
             Range,
-            self.get_parameter('topic'),
+            topic_name,
             self.listener_callback,
             qos_profile,
         )
-
-        # # Set up the 8 histogram formats and titles.
-        # self.patches = [1, 2, 3, 4, 5, 6, 7, 8]
-        # for row in range(2):
-        #     for col in range(4):
-        #         n, bins, patches = self.axis[row][col].hist(
-        #             self.last_n_values_per_sensor[row][col], self.bins, histtype='bar')
-        #         self.patches[(row * 4) + col] = patches
-        #         self.axis[row, col].set_title(
-        #             self.sensor_names[row][col], fontsize=8, fontfamily='monospace')
-        
-        # # Let's go.
-        # plt.ion()
-        # plt.show()
         
         self.subscription  # prevent unused variable warning
 
 
     # Process a time-of-flight sensor message of type Range.
-    def listener_callback(self, msg):
-        self.callback_count = self.callback_count + 1
-        range_value = msg.range
-        print(f'callback number: {self.callback_count_}')
+    def listener_callback(self, msg: Range):
+        now_ns = self.get_clock().now().nanoseconds
+        msg_ns = Time.from_msg(msg.header.stamp).nanoseconds
+        skew_s = (now_ns - msg_ns) / 1.0e9
+        if skew_s < self.min_skew_:
+            self.min_skew_ = skew_s
+        if skew_s > self.max_skew_:
+            self.max_skew_ = skew_s
+        self.total_skew_ += skew_s
         self.callback_count_ = self.callback_count_ + 1
-        # if (range_value > 2.0):
-        #     # If the range is greater than 2 meters, ignore it by setting it to zero.
-        #     range_value = 0
-            
-        # # Capture the last readings of the sensor in a ring buffer.
-        # self.last_n_values_per_sensor[sensor_number][self.next_index_number[sensor_number]] = range_value
 
-        # if (self.callback_count % 24) == 0:
-        #     # Peridically update the plots.
-        #     for s in range(8):
-        #         # For each sensor, create a histogram.
-        #         data = self.last_n_values_per_sensor[s]
-        #         n, _ = np.histogram(data, self.bins, density=True)
-        #         max = n.max()
-        #         for count, rect in zip(n, self.patches[s]):
-        #             rect.set_height(count / max) # Normalize the height of the rectangle.
-        #     self.figure.canvas.draw()
-        #     self.figure.canvas.flush_events()
-            
-        #     # Print out the frames per second of sensor data for all 8 sensors since the last plot update.
-        #     # Divide by 8 if you want to know the frames per second per sensor.
-        #     duration = datetime.now() - self.start_time
-        #     fps = self.callback_count / (duration.seconds + (duration.microseconds / 1000000.0))
-        #     print("callback_count: %d, duration: %f, fps: %3.2f" % (self.callback_count, (duration.seconds + (duration.microseconds / 1000000.0)), fps))
-
-        # # Update the ring buffer index.
-        # self.next_index_number[sensor_number] = self.next_index_number[sensor_number] + 1
-        # if self.next_index_number[sensor_number] >= self.number_values_to_cache:
-        #     self.next_index_number[sensor_number] = 0
+        if (now_ns - self.start_time_ns_) > 1000000000:
+            self.get_logger().info(f"Callbacks in one second: {self.callback_count_ - self.start_callback_count_}, min_ms: {self.min_skew_*1000:.3f}, max_ms: {self.max_skew_*1000:.3f}, avs_ms: {(self.total_skew_/self.callback_count_)*1000:.3f}")
+            self.reset_measurements()
 
 def main(args=None):
     rclpy.init(args=args)
 
-    minimal_subscriber = MinimalSubscriber()
+    minimal_subscriber = ShowTimeSkew()
 
     rclpy.spin(minimal_subscriber)
 
