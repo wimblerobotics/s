@@ -1,7 +1,8 @@
 /oak_d_left:
   ros__parameters:
     camera:
-      i_mx_id: 14442C1051B665D700
+      # i_mx_id: 14442C1051B665D700
+      i_mx_id: 14442C10910D5ED700
       i_nn_type: none
       right:
         i_publish_topic: true
@@ -12,7 +13,8 @@
 /oak_d_right:
   ros__parameters:
     camera:
-      i_mx_id: 14442C10910D5ED700
+      # i_mx_id: 14442C10910D5ED700
+      i_mx_id: 14442C1051B665D700
       i_nn_type: none
       right:
         i_publish_topic: true
