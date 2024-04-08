@@ -165,9 +165,10 @@ SOFTWARE.
         <child link="oakd_left_right_camera_optical_frame"/>
         <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
+
     <xacro:oakd_link mount_point="left" />
     <xacro:oakd_joint mount_point="left">
-        <origin xyz="0.170 0.055 0.350" rpy="0 0 0.523599" />
+        <origin xyz="0.170 0.055 0.350" rpy="0 0 0.5" />
     </xacro:oakd_joint>
     <link name="oakd_right_right_camera_optical_frame" />
     <joint name="oakd_right_link_optical_frame" type="fixed">
