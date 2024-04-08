@@ -6,6 +6,7 @@ from rclpy.time import Time
 
 from sensor_msgs.msg._range import Range
 from std_msgs.msg import String
+from sensor_msgs.msg._laser_scan import LaserScan
 
 class ShowTimeSkew(Node):
 
@@ -31,7 +32,8 @@ class ShowTimeSkew(Node):
         topic_name = self.get_parameter('topic').get_parameter_value().string_value
         self.get_logger().info(f'Subscrbing to topic: {topic_name}')
         self.subscription = self.create_subscription(
-            Range,
+            #Range,
+            LaserScan,
             topic_name,
             self.listener_callback,
             qos_profile,
