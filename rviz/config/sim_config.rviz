@@ -5,20 +5,15 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Grid1
         - /TF1/Tree1
         - /lidar_frame_right_rear1/Topic1
         - /Map1/Topic1
         - /Map1/Update Topic1
-        - /Amcl Particle Swarm1/Topic1
         - /Odometry1/Topic1
         - /Odometry1/Shape1
-        - /Cost cloud1/Topic1
-        - /Marker1/Topic1
-        - /PoseWithCovariance1/Topic1
-        - /Path2/Topic1
+        - /OAK-D Right Camera1/Topic1
       Splitter Ratio: 0.5437352061271667
-    Tree Height: 512
+    Tree Height: 478
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -113,6 +108,24 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        oakd_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        oakd_left_right_camera_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        oakd_right:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        oakd_right_right_camera_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         rear_caster_wheel_link:
           Alpha: 1
           Show Axes: false
@@ -404,7 +417,7 @@ Visualization Manager:
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
       Draw Behind: true
-      Enabled: true
+      Enabled: false
       Name: Global costmap
       Topic:
         Depth: 5
@@ -420,7 +433,7 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /global_costmap/costmap_updates
       Use Timestamp: false
-      Value: true
+      Value: false
     - Alpha: 0.5
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
@@ -502,122 +515,224 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: SonarGroup
-    - Class: rviz_common/Group
-      Displays:
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz_default_plugins/Range
-          Color: 237; 212; 0
-          Enabled: true
-          Name: tof0Sensor
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Best Effort
-            Value: /tof0Sensor
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz_default_plugins/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
           Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz_default_plugins/Range
-          Color: 237; 212; 0
-          Enabled: true
-          Name: tof1Sensor
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Best Effort
-            Value: /tof1Sensor
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
           Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz_default_plugins/Range
-          Color: 237; 212; 0
-          Enabled: true
-          Name: tof2Sensor
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Best Effort
-            Value: /tof2Sensor
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz_default_plugins/Range
-          Color: 237; 212; 0
-          Enabled: true
-          Name: tof3Sensor
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Best Effort
-            Value: /tof3Sensor
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz_default_plugins/Range
-          Color: 237; 212; 0
-          Enabled: true
-          Name: tof4Sensor
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Best Effort
-            Value: /tof4Sensor
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz_default_plugins/Range
-          Color: 237; 212; 0
-          Enabled: true
-          Name: tof5Sensor
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Best Effort
-            Value: /tof5Sensor
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz_default_plugins/Range
-          Color: 237; 212; 0
-          Enabled: true
-          Name: tof6Sensor
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Best Effort
-            Value: /tof6Sensor
-          Value: true
-        - Alpha: 0.5
-          Buffer Length: 1
-          Class: rviz_default_plugins/Range
-          Color: 237; 212; 0
-          Enabled: true
-          Name: tof7Sensor
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Best Effort
-            Value: /tof7Sensor
-          Value: true
+        Value: false
       Enabled: false
-      Name: TofGroup
+      Keep: 1
+      Name: Odometry
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 255; 25; 0
+        Head Length: 0.30000001192092896
+        Head Radius: 0.10000000149011612
+        Shaft Length: 1
+        Shaft Radius: 0.009999999776482582
+        Value: Arrow
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /odom
+      Value: false
+    - Class: rviz_default_plugins/Image
+      Enabled: false
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: OAK-D Left Camera
+      Normalize Range: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /oakd_left/color/image/compressed
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: OAK-D Left PointCloud
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 2
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /oakd_left/stereo/points
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Class: rviz_default_plugins/Image
+      Enabled: false
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: OAK-D Right Camera
+      Normalize Range: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /oakd_right/color/image/compressed
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: OAK-D Right Pointcloud
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 2
+      Size (m): 0.009999999776482582
+      Style: Points
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /oakd_right/stereo/points
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Class: rviz_default_plugins/Polygon
+      Color: 25; 255; 0
+      Enabled: true
+      Name: Local footprint
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /local_costmap/published_footprint
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz_default_plugins/Path
+      Color: 224; 27; 36
+      Enabled: true
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: Local Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /local_plan
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz_default_plugins/Path
+      Color: 129; 61; 156
+      Enabled: false
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: Global Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /plan
+      Value: false
+    - Class: rviz_default_plugins/Axes
+      Enabled: false
+      Length: 1
+      Name: Home Axes
+      Radius: 0.05000000074505806
+      Reference Frame: <Fixed Frame>
+      Value: false
+    - Class: rviz_default_plugins/Axes
+      Enabled: false
+      Length: 1.5
+      Name: Odom Axes
+      Radius: 0.029999999329447746
+      Reference Frame: odom
+      Value: false
     - Alpha: 1
       Arrow Length: 0.019999999552965164
       Axes Length: 0.30000001192092896
@@ -638,6 +753,88 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Best Effort
         Value: /particlecloud
+      Value: false
+    - Alpha: 1
+      Axes Length: 1
+      Axes Radius: 0.10000000149011612
+      Class: rviz_default_plugins/PoseWithCovariance
+      Color: 255; 25; 0
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: false
+      Head Length: 0.30000001192092896
+      Head Radius: 0.10000000149011612
+      Name: AMCL Pose
+      Shaft Length: 1
+      Shaft Radius: 0.05000000074505806
+      Shape: Arrow
+      Topic:
+        Depth: 5
+        Durability Policy: Transient Local
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /amcl_pose
+      Value: false
+    - Alpha: 1
+      Class: rviz_default_plugins/Polygon
+      Color: 158; 180; 90
+      Enabled: false
+      Name: Global footprint
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /global_costmap/published_footprint
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud
+      Color: 255; 255; 255
+      Color Transformer: ""
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: Cost cloud
+      Position Transformer: ""
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /cost_cloud
+      Use Fixed Frame: true
+      Use rainbow: true
       Value: false
     - Class: rviz_common/Group
       Displays:
@@ -751,18 +948,6 @@ Visualization Manager:
           Value: false
       Enabled: false
       Name: Controller
-    - Class: rviz_default_plugins/MarkerArray
-      Enabled: false
-      Name: waypoints
-      Namespaces:
-        {}
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /waypoints
-      Value: false
     - Class: rviz_common/Group
       Displays:
         - Alpha: 0.30000001192092896
@@ -884,133 +1069,122 @@ Visualization Manager:
           Value: true
       Enabled: false
       Name: Global Planner
-    - Angle Tolerance: 0.10000000149011612
-      Class: rviz_default_plugins/Odometry
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
+    - Class: rviz_common/Group
+      Displays:
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz_default_plugins/Range
+          Color: 237; 212; 0
+          Enabled: true
+          Name: tof0Sensor
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /tof0Sensor
           Value: true
-        Position:
-          Alpha: 0.30000001192092896
-          Color: 204; 51; 204
-          Scale: 1
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz_default_plugins/Range
+          Color: 237; 212; 0
+          Enabled: true
+          Name: tof1Sensor
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /tof1Sensor
           Value: true
-        Value: false
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz_default_plugins/Range
+          Color: 237; 212; 0
+          Enabled: true
+          Name: tof2Sensor
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /tof2Sensor
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz_default_plugins/Range
+          Color: 237; 212; 0
+          Enabled: true
+          Name: tof3Sensor
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /tof3Sensor
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz_default_plugins/Range
+          Color: 237; 212; 0
+          Enabled: true
+          Name: tof4Sensor
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /tof4Sensor
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz_default_plugins/Range
+          Color: 237; 212; 0
+          Enabled: true
+          Name: tof5Sensor
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /tof5Sensor
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz_default_plugins/Range
+          Color: 237; 212; 0
+          Enabled: true
+          Name: tof6Sensor
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /tof6Sensor
+          Value: true
+        - Alpha: 0.5
+          Buffer Length: 1
+          Class: rviz_default_plugins/Range
+          Color: 237; 212; 0
+          Enabled: true
+          Name: tof7Sensor
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Best Effort
+            Value: /tof7Sensor
+          Value: true
       Enabled: false
-      Keep: 1
-      Name: Odometry
-      Position Tolerance: 0.10000000149011612
-      Shape:
-        Alpha: 1
-        Axes Length: 1
-        Axes Radius: 0.10000000149011612
-        Color: 255; 25; 0
-        Head Length: 0.30000001192092896
-        Head Radius: 0.10000000149011612
-        Shaft Length: 1
-        Shaft Radius: 0.009999999776482582
-        Value: Arrow
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: /odom
-      Value: false
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz_default_plugins/PointCloud
-      Color: 255; 255; 255
-      Color Transformer: ""
-      Decay Time: 0
-      Enabled: false
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: Cost cloud
-      Position Transformer: ""
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Flat Squares
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: /cost_cloud
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: false
-    - Class: rviz_default_plugins/Image
-      Enabled: false
-      Max Value: 1
-      Median window: 5
-      Min Value: 0
-      Name: OAK-D Left Camera
-      Normalize Range: true
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: /oakd_left/left/image_rect
-      Value: false
-    - Class: rviz_default_plugins/Image
-      Enabled: false
-      Max Value: 1
-      Median window: 5
-      Min Value: 0
-      Name: OAK-D Right Camera
-      Normalize Range: true
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /oakd_right/right/image_rect
-      Value: false
-    - Alpha: 1
-      Class: rviz_default_plugins/Polygon
-      Color: 158; 180; 90
-      Enabled: false
-      Name: Global footprint
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /global_costmap/published_footprint
-      Value: false
-    - Alpha: 1
-      Class: rviz_default_plugins/Polygon
-      Color: 25; 255; 0
-      Enabled: true
-      Name: Local footprint
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /local_costmap/published_footprint
-      Value: true
+      Name: TofGroup
     - Class: rviz_default_plugins/Marker
       Enabled: false
       Name: Marker
@@ -1024,111 +1198,18 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /line_markers
       Value: false
-    - Alpha: 1
-      Axes Length: 1
-      Axes Radius: 0.10000000149011612
-      Class: rviz_default_plugins/PoseWithCovariance
-      Color: 255; 25; 0
-      Covariance:
-        Orientation:
-          Alpha: 0.5
-          Color: 255; 255; 127
-          Color Style: Unique
-          Frame: Local
-          Offset: 1
-          Scale: 1
-          Value: true
-        Position:
-          Alpha: 0.30000001192092896
-          Color: 204; 51; 204
-          Scale: 1
-          Value: true
-        Value: true
+    - Class: rviz_default_plugins/MarkerArray
       Enabled: false
-      Head Length: 0.30000001192092896
-      Head Radius: 0.10000000149011612
-      Name: PoseWithCovariance
-      Shaft Length: 1
-      Shaft Radius: 0.05000000074505806
-      Shape: Arrow
-      Topic:
-        Depth: 5
-        Durability Policy: Transient Local
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: /amcl_pose
-      Value: false
-    - Alpha: 1
-      Buffer Length: 1
-      Class: rviz_default_plugins/Path
-      Color: 129; 61; 156
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Lines
-      Line Width: 0.029999999329447746
-      Name: Path
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
+      Name: waypoints
+      Namespaces:
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
-        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /plan
-      Value: true
-    - Class: rviz_default_plugins/Axes
-      Enabled: false
-      Length: 1.5
-      Name: Odom Axes
-      Radius: 0.029999999329447746
-      Reference Frame: odom
+        Value: /waypoints
       Value: false
-    - Class: rviz_default_plugins/Axes
-      Enabled: true
-      Length: 1
-      Name: Home Axes
-      Radius: 0.05000000074505806
-      Reference Frame: <Fixed Frame>
-      Value: true
-    - Alpha: 1
-      Buffer Length: 1
-      Class: rviz_default_plugins/Path
-      Color: 224; 27; 36
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Lines
-      Line Width: 0.029999999329447746
-      Name: Path
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /local_plan
-      Value: true
   Enabled: true
   Global Options:
     Background Color: 136; 138; 133
@@ -1166,7 +1247,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 1.5600000619888306
+      Angle: -0.004999999888241291
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -1176,11 +1257,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 167.4557342529297
+      Scale: 205.9898681640625
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
-      X: 0.3553747236728668
-      Y: 1.017673373222351
+      X: 1.0040100812911987
+      Y: 1.065486192703247
     Saved: ~
 Window Geometry:
   Displays:
@@ -1194,7 +1275,7 @@ Window Geometry:
     collapsed: false
   OAK-D Right Camera:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000001a900000436fc0200000010fb0000001200530065006c0065006300740069006f006e010000003b0000005c0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000009d0000023b000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e0020003201000002de000001930000011200fffffffb0000001e005200650061006c00730065006e0073006500430061006d00650072006101000001ee0000004b0000000000000000fb0000000c00430061006d00650072006101000002bd000000160000000000000000fb00000022004f0041004b002d00440020004c006500660074002000430061006d00650072006100000002b4000001360000002800fffffffb0000000c00430061006d00650072006101000001f4000000df0000000000000000fb00000024004f0041004b002d0044002000520069006700680074002000430061006d00650072006100000003ba000000b50000002800fffffffb0000000a0049006d0061006700650100000312000000bc0000000000000000fb000000220053006c0061006d0054006f006f006c0062006f00780050006c007500670069006e00000002ea000001850000016d00ffffff000000010000010f00000436fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b00000436000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000003a10000043600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000001a900000436fc0200000010fb0000001200530065006c0065006300740069006f006e010000003b000000840000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000c500000219000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e0020003201000002e40000018d0000011200fffffffb0000001e005200650061006c00730065006e0073006500430061006d00650072006101000001ee0000004b0000000000000000fb0000000c00430061006d00650072006101000002bd000000160000000000000000fb00000022004f0041004b002d00440020004c006500660074002000430061006d006500720061000000035b000001160000002800fffffffb0000000c00430061006d00650072006101000001f4000000df0000000000000000fb00000024004f0041004b002d0044002000520069006700680074002000430061006d00650072006100000003d70000009a0000002800fffffffb0000000a0049006d0061006700650100000312000000bc0000000000000000fb000000220053006c0061006d0054006f006f006c0062006f00780050006c007500670069006e00000002ea000001850000016d00ffffff000000010000010f00000436fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b00000436000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004070000043600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   SlamToolboxPlugin:
@@ -1203,6 +1284,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: true
-  Width: 1360
-  X: 643
-  Y: 122
+  Width: 1462
+  X: 90
+  Y: 686
