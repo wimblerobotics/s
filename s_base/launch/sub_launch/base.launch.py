@@ -69,10 +69,10 @@ def generate_launch_description():
     )
     ld.add_action(start_robot_localization_cmd)
     
-    # # Bring up the OAK-Ds
-    # oakds_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         [s_base_directory_path, '/launch/sub_launch/oakds.launch.py']))
-    # ld.add_action(oakds_launch)
+    # Bring up the OAK-Ds
+    oakds_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            [s_base_directory_path, '/launch/sub_launch/oakds.launch.py']))
+    ld.add_action(oakds_launch)
 
     return ld
