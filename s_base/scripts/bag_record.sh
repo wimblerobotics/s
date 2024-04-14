@@ -1,0 +1,46 @@
+#/usr/bin/sh
+ros2 bag record \
+    /amcl_pose \
+    /behavior_tree_log \
+    /clicked_point \
+    /cmd_vel \
+    /cmd_vel_nav \
+    /cmd_vel_teleop \
+    /diagnostics \
+    /global_costmap/costmap \
+    /global_costmap/footprint \
+    /goal_pose \
+    /initialpose \
+    /joint_states \
+    /local_costmap/costmap \
+    /local_costmap/footprint \
+    /local_plan \
+    /map \
+    /oakd_left/color/camera_info \
+    /oakd_left/color/image/theora \
+    /oakd_left/stereo/depth/compressedDepth \
+    /oakd_left/imu \
+    /oakd_right/imu \
+    /odom \
+    /parameter_events \
+    /particle_cloud \
+    /plan \
+    /plan_smoothed \
+    /roboclaw_status \
+    /robot_description \
+    /rosout \
+    /scan \
+    /set_pose \
+    /sonar0Sensor \
+    /sonar1Sensor \
+    /sonar2Sensor \
+    /sonar3Sensor \
+    /teensy_diagnostics \
+    /teensy_stats \
+    /tf \
+    /tf_static \
+    /trajectories \
+    /transformed_global_plan \
+    /unsmoothed_plan \
+    /waypoints \
+    /wheel_odom
