@@ -1,5 +1,9 @@
 ## sona0Sensor is published at 70 fps, but /wheel_odom is at 9
 ## Following path is not smooth enough
+## Get velocity_smoother configured properly
+## Get various cmd_vel publishers (8) to go through the multiplexer
+## Get the OAK-D camera to emit a voxyl map
+## Enable both OAK-D cameras
 
 ## speed test on raven
 ros@amdb:~/s_ws/src/s/s_base/config$ speedtest-cli --secure
