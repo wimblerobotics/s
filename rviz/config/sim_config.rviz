@@ -12,6 +12,7 @@ Panels:
         - /Odometry1/Topic1
         - /Odometry1/Shape1
         - /OAK-D Right Camera1/Topic1
+        - /Controller1
       Splitter Ratio: 0.5437352061271667
     Tree Height: 478
   - Class: rviz_common/Selection
@@ -62,151 +63,20 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /robot_description
-      Enabled: true
+      Enabled: false
       Links:
         All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base_footprint:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_caster_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        ld06_base_cylinder_top_lidar:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        ld06_box_top_lidar:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        ld06_cylinder_top_lidar:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        left_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        lidar_frame_top_lidar:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        oakd_left:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        oakd_left_right_camera_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        oakd_right:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        oakd_right_right_camera_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rear_caster_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        right_wheel_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        scan:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        sonar_0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        sonar_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        sonar_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        sonar_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tof_0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tof_1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tof_2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tof_3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tof_4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tof_5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tof_6:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        tof_7:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
-      Value: true
+      Value: false
       Visual Enabled: true
     - Class: rviz_default_plugins/TF
       Enabled: false
@@ -651,6 +521,22 @@ Visualization Manager:
       Use rainbow: true
       Value: false
     - Alpha: 1
+      Class: nav2_rviz_plugins/ParticleCloud
+      Color: 255; 25; 0
+      Enabled: true
+      Max Arrow Length: 0.30000001192092896
+      Min Arrow Length: 0.019999999552965164
+      Name: AMCL ParticleCloud
+      Shape: Arrow (Flat)
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /particle_cloud
+      Value: true
+    - Alpha: 1
       Class: rviz_default_plugins/Polygon
       Color: 25; 255; 0
       Enabled: true
@@ -720,40 +606,19 @@ Visualization Manager:
         Value: /plan
       Value: false
     - Class: rviz_default_plugins/Axes
-      Enabled: false
+      Enabled: true
       Length: 1
       Name: Home Axes
       Radius: 0.05000000074505806
       Reference Frame: <Fixed Frame>
-      Value: false
+      Value: true
     - Class: rviz_default_plugins/Axes
-      Enabled: false
+      Enabled: true
       Length: 1.5
       Name: Odom Axes
       Radius: 0.029999999329447746
       Reference Frame: odom
-      Value: false
-    - Alpha: 1
-      Arrow Length: 0.019999999552965164
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
-      Class: rviz_default_plugins/PoseArray
-      Color: 0; 180; 0
-      Enabled: false
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
-      Name: Amcl Particle Swarm
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Best Effort
-        Value: /particlecloud
-      Value: false
+      Value: true
     - Alpha: 1
       Axes Length: 1
       Axes Radius: 0.10000000149011612
@@ -1257,11 +1122,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 91.19929504394531
+      Scale: 98.5186767578125
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -2.153348207473755
-      Y: 1.8656738996505737
+      X: -2.268486976623535
+      Y: 2.3148083686828613
     Saved: ~
 Window Geometry:
   Displays:
@@ -1275,7 +1140,7 @@ Window Geometry:
     collapsed: false
   OAK-D Right Camera:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000001a900000436fc0200000010fb0000001200530065006c0065006300740069006f006e010000003b000000840000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000c500000219000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e0020003201000002e40000018d0000012300fffffffb0000001e005200650061006c00730065006e0073006500430061006d00650072006101000001ee0000004b0000000000000000fb0000000c00430061006d00650072006101000002bd000000160000000000000000fb00000022004f0041004b002d00440020004c006500660074002000430061006d006500720061000000035b000001160000002800fffffffb0000000c00430061006d00650072006101000001f4000000df0000000000000000fb00000024004f0041004b002d0044002000520069006700680074002000430061006d00650072006100000003d70000009a0000002800fffffffb0000000a0049006d0061006700650100000312000000bc0000000000000000fb000000220053006c0061006d0054006f006f006c0062006f00780050006c007500670069006e00000002ea000001850000016d00ffffff000000010000010f00000436fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b00000436000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004070000043600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000001a900000436fc0200000010fb0000001200530065006c0065006300740069006f006e010000003b000000840000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000c500000219000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e0020003201000002e40000018d0000011200fffffffb0000001e005200650061006c00730065006e0073006500430061006d00650072006101000001ee0000004b0000000000000000fb0000000c00430061006d00650072006101000002bd000000160000000000000000fb00000022004f0041004b002d00440020004c006500660074002000430061006d006500720061000000035b000001160000002800fffffffb0000000c00430061006d00650072006101000001f4000000df0000000000000000fb00000024004f0041004b002d0044002000520069006700680074002000430061006d00650072006100000003d70000009a0000002800fffffffb0000000a0049006d0061006700650100000312000000bc0000000000000000fb000000220053006c0061006d0054006f006f006c0062006f00780050006c007500670069006e00000002ea000001850000016d00ffffff000000010000010f00000436fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003b00000436000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004070000043600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   SlamToolboxPlugin:

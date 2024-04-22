@@ -1,11 +1,11 @@
-amcl:
+amcl: # See: https://assets.researchsquare.com/files/rs-225880/v1_covered.pdf?c=1631856303
   ros__parameters:
     use_sim_time: True
-    alpha1: 0.01 #0.2  # Expected process noise in odometry’s rotation estimate from rotation.
-    alpha2: 0.01 #0.2  # Expected process noise in odometry’s rotation estimate from translation.
-    alpha3: 0.01 #0.2  # Expected process noise in odometry’s translation estimate from translation.
-    alpha4: 0.01 #0.2  # Expected process noise in odometry’s translation estimate from rotation.
-    alpha5: 0.2       # For Omni models only: translation noise.
+    alpha1: 0.20 #0.2  # Expected process noise in odometry’s rotation estimate from rotation.
+    alpha2: 0.20 #0.2  # Expected process noise in odometry’s rotation estimate from translation.
+    alpha3: 0.20 #0.2  # Expected process noise in odometry’s translation estimate from translation.
+    alpha4: 0.20 #0.2  # Expected process noise in odometry’s translation estimate from rotation.
+    alpha5: 0.20       # For Omni models only: translation noise.
     base_frame_id: "base_footprint"
     beam_skip_distance: 0.5 # Ignore beams that most particles disagree with in Likelihood field model. Maximum distance to consider skipping for (m).
     beam_skip_error_threshold: 0.9  # Percentage of beams after not matching map to force full update due to bad convergance.
@@ -19,7 +19,7 @@ amcl:
     laser_model_type: "likelihood_field" # Which model to use, either beam, likelihood_field, or likelihood_field_prob.
     max_beams: 450          # How many evenly-spaced beams in each scan to be used when updating the filter.
     max_particles: 2000     # Maximum allowed number of particles.
-    min_particles: 500      # Minimum allowed number of particles.
+    min_particles: 1000     # Minimum allowed number of particles.
     odom_frame_id: "odom"   # Which frame to use for odometry.
     pf_err: 0.05            # Particle Filter population error.  
     pf_z: 0.99              # Particle filter population density.
@@ -31,12 +31,13 @@ amcl:
     sigma_hit: 0.2          # Standard deviation for Gaussian model used in z_hit part of the model.
     tf_broadcast: true      # Set this to false to prevent amcl from publishing the transform between the global frame and the odometry frame.
     transform_tolerance: 0.3 # Time with which to post-date the transform that is published, to indicate that this transform is valid into the future.
-    update_min_a: 0.05     # Rotational movement required before performing a filter update.
+    # One degree = 0.017453278 radians
+    update_min_a: 0.01745   # Rotational movement required before performing a filter update.
     update_min_d: 0.05      # Translational movement required before performing a filter update.
-    z_hit: 0.9              # Mixture weight for z_hit part of model, sum of all used z weight must be 1. 
-    z_max: 0.05             # Mixture weight for z_max part of model, sum of all used z weight must be 1. Beam uses all 4, likelihood model uses z_hit and z_rand.
-    z_rand: 0.5             # Mixture weight for z_rand part of model, sum of all used z weight must be 1.
-    z_short: 0.05           # Mixture weight for z_short part of model, sum of all used z weight must be 1.
+    z_hit: 0.95             # Mixture weight for z_hit part of model, sum of all used z weight must be 1. 
+    z_max: 0.001            # Mixture weight for z_max part of model, sum of all used z weight must be 1. Beam uses all 4, likelihood model uses z_hit and z_rand.
+    z_rand: 0.05            # Mixture weight for z_rand part of model, sum of all used z weight must be 1.
+    z_short: 0.001          # Mixture weight for z_short part of model, sum of all used z weight must be 1.
     scan_topic: scan
     set_initial_pose: true # Causes AMCL to set initial pose from the initial_pose* parameters instead of waiting for the initial_pose message.
     initial_pose:
@@ -267,8 +268,8 @@ local_costmap:
       plugins: ["range_layer", "voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 4.0
-        inflation_radius: 0.2
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.3
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
@@ -289,6 +290,30 @@ local_costmap:
           obstacle_min_range: 0.2
           raytrace_max_range: 5.0
           raytrace_min_range: 0.0
+      oak_d_left:
+        plugin: "nav2_costmap_2d::VoxelLayer"
+        enabled: true
+        footprint_clearing_enabled: true
+        max_obstacle_height: 2.0
+        publish_voxel_map: true
+        origin_z: 0.0
+        z_resolution: 0.0508
+        z_voxels: 16
+        unknown_threshold: 15
+        mark_threshold: 0
+        observation_sources: pointcloud
+        combination_method: 1
+        pointcloud:  # no frame set, uses frame from message
+          topic: /oakd_left/stereo/points
+          max_obstacle_height: 2.0
+          min_obstacle_height: 0.01
+          obstacle_max_range: 2.5
+          obstacle_min_range: 0.0
+          raytrace_max_range: 3.0
+          raytrace_min_range: 0.0
+          clearing: true
+          marking: true
+          data_type: "PointCloud2"
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -486,7 +511,7 @@ behavior_server:
   ros__parameters:
     costmap_topic: local_costmap/costmap_raw
     footprint_topic: local_costmap/published_footprint
-    cycle_frequency: 30.0
+    cycle_frequency: 20.0
     behavior_plugins: ["spin", "backup", "drive_on_heading", "assisted_teleop", "wait"]
     spin:
       plugin: "nav2_behaviors/Spin"
@@ -522,18 +547,18 @@ waypoint_follower:
       enabled: True
       waypoint_pause_duration: 200
 
-# velocity_smoother:
-#   ros__parameters:
-#     use_sim_time: True
-#     use_realtime_priority: True
-#     smoothing_frequency: 100.0 
-#     scale_velocities: False
-#     feedback: "OPEN_LOOP"
-#     max_velocity: [0.2, 0.0, 0.1]
-#     min_velocity: [-0.2, 0.0, -0.1]
-#     max_accel: [0.1, 0.0, 1.0]
-#     max_decel: [-0.1, 0.0, -1.0]
-#     odom_topic: "odom"
-#     odom_duration: 0.2
-#     deadband_velocity: [0.0, 0.0, 0.0]
-#     velocity_timeout: 1.0
+velocity_smoother:
+  ros__parameters:
+    use_sim_time: True
+    use_realtime_priority: True
+    smoothing_frequency: 50.0 
+    scale_velocities: False
+    feedback: "OPEN_LOOP"
+    max_velocity: [0.2, 0.0, 0.1]
+    min_velocity: [-0.2, 0.0, -0.1]
+    max_accel: [0.1, 0.0, 1.0]
+    max_decel: [-0.1, 0.0, -1.0]
+    odom_topic: "odom"
+    odom_duration: 0.2
+    deadband_velocity: [0.0, 0.0, 0.0]
+    velocity_timeout: 1.0
