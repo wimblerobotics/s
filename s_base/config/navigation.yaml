@@ -143,7 +143,6 @@ controller_server:
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 0.2 # 0.1016 # 4 inches
       yaw_goal_tolerance: 0.2 # 0.0872 # 5 degrees
-    # DWB parameters
     FollowPath:
       plugin: "nav2_mppi_controller::MPPIController"
       time_steps: 56
@@ -529,8 +528,8 @@ behavior_server:
     use_sim_time: true
     simulate_ahead_time: 2.0
     max_rotational_vel: 1.0
-    min_rotational_vel: 0.2
-    rotational_acc_lim: 3.2
+    min_rotational_vel: 0.017
+    rotational_acc_lim: 0.2
 
 robot_state_publisher:
   ros__parameters:
@@ -556,8 +555,8 @@ velocity_smoother:
     feedback: "OPEN_LOOP"
     max_velocity: [0.2, 0.0, 0.1]
     min_velocity: [-0.2, 0.0, -0.1]
-    max_accel: [0.1, 0.0, 1.0]
-    max_decel: [-0.1, 0.0, -1.0]
+    max_accel: [0.1, 0.0, 0.1]
+    max_decel: [-0.1, 0.0, -0.1]
     odom_topic: "odom"
     odom_duration: 0.2
     deadband_velocity: [0.0, 0.0, 0.0]
