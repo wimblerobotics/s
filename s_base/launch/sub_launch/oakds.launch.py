@@ -20,9 +20,8 @@ import common
 
 def generate_launch_description():
     oakd_launch_path = PathJoinSubstitution(
-        [FindPackageShare('s_base'), 'launch', 'sub_launch', 
-         'stereo.launch.py'
-        #  'stereo_inertial_node.launchX.py'
+        [FindPackageShare('s_base'), 'launch', 'sub_launch',
+         'stereo_inertial_node.launchX.py'
         ]
     )
 
@@ -45,13 +44,39 @@ def generate_launch_description():
             )
         ]
     )
-    # stereo_node_left = GroupAction(
+    ld.add_action(stereo_node_left)
+
+    stereo_node_right = GroupAction(
+        actions=[
+            PushRosNamespace('oakd_right'),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(oakd_launch_path),
+                launch_arguments={
+                    'base_frame' : 'oakd_right_base',
+                    'camera_model' : 'OAK-D',
+                    'parent_frame': 'oakd_right',
+                    # 'rgbResolution': '1080p',
+                    'tf_prefix' : 'oakd_right',
+                    'mxId' : '14442C10910D5ED700',
+                }.items()
+            )
+        ]
+    )
+    ld.add_action(stereo_node_right)
+
+    # # stereo_node_left = GroupAction(
+    # #     actions=[
+    # #         PushRosNamespace('oakd_left'),
+    # #         IncludeLaunchDescription(
+    # #             PythonLaunchDescriptionSource(oakd_launch_path),
+    # #             launch_arguments={(
     #     actions=[
     #         PushRosNamespace('oakd_left'),
     #         IncludeLaunchDescription(
     #             PythonLaunchDescriptionSource(oakd_launch_path),
     #             launch_arguments={
     #                 'base_frame' : 'oakd_left_base',
+    #                 'camera_model' : 'OAK-D',
     #                 'parent_frame': 'oakd_left',
     #                 # 'rgbResolution': '1080p',
     #                 'tf_prefix' : 'oakd_left',
@@ -60,23 +85,58 @@ def generate_launch_description():
     #         )
     #     ]
     # )
-    ld.add_action(stereo_node_left)
+    # # stereo_node_left = GroupAction(
+    # #     actions=[
+    # #         PushRosNamespace('oakd_left'),
+    # #         IncludeLaunchDescription(
+    # #             PythonLaunchDescriptionSource(oakd_launch_path),
+    # #             launch_arguments={
+    # #                 'base_frame' : 'oakd_left_base',
+    # #                 'parent_frame': 'oakd_left',
+    # #                 # 'rgbResolution': '1080p',
+    # #                 'tf_prefix' : 'oakd_left',
+    # #                 'mxId' : '14442C1051B665D700',
+    # #             }.items()
+    # #         )
+    # #     ]
+    # # )
+    # ld.add_action(stereo_node_left)
 
-    # stereo_node_right = GroupAction(
-    #     actions=[
-    #         PushRosNamespace('oakd_right'),
-    #         IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource(oakd_launch_path),
-    #             launch_arguments={
-    #                 'base_frame' : 'oakd_right_base',
-    #                 'parent_frame': 'oakd_right',
-    #                 'rgbResolution': '1080p',
-    #                 'tf_prefix' : 'oakd_right',
-    #                 'mxId' : '14442C10910D5ED700',
-    #             }.items()
-    #         )
-    #     ]
-    # )
-    # ld.add_action(stereo_node_right)
+    # # stereo_node_right = GroupAction(
+    # #     actions=[
+    # #         PushRosNamespace('oakd_right'),
+    # #         IncludeLaunchDescription(
+    # #             PythonLaunchDescriptionSource(oakd_launch_path),
+    # #             launch_arguments={
+    # #                 'base_frame' : 'oakd_right_base',
+    # #                 'parent_frame': 'oakd_right',
+    # #                 'rgbResolution': '1080p',
+    # #                 'tf_prefix' : 'oakd_right',
+    # #                 'mxId' : '14442C10910D5ED700',
+    # #             }.items()
+    # #         )
+    # #     ]
+    # # )
+    # # ld.add_action(stereo_node_right)
+    # #     ]
+    # # )
+    # ld.add_action(stereo_node_left)
+
+    # # stereo_node_right = GroupAction(
+    # #     actions=[
+    # #         PushRosNamespace('oakd_right'),
+    # #         IncludeLaunchDescription(
+    # #             PythonLaunchDescriptionSource(oakd_launch_path),
+    # #             launch_arguments={
+    # #                 'base_frame' : 'oakd_right_base',
+    # #                 'parent_frame': 'oakd_right',
+    # #                 'rgbResolution': '1080p',
+    # #                 'tf_prefix' : 'oakd_right',
+    # #                 'mxId' : '14442C10910D5ED700',
+    # #             }.items()
+    # #         )
+    # #     ]
+    # # )
+    # # ld.add_action(stereo_node_right)
 
     return ld

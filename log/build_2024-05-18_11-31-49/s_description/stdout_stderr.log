@@ -1,0 +1,66 @@
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found urdf: 2.6.0 (/opt/ros/humble/share/urdf/cmake)
+-- Found ament_lint_auto: 0.12.10 (/opt/ros/humble/share/ament_lint_auto/cmake)
+-- Added test 'copyright' to check source files copyright and LICENSE
+-- Added test 'flake8' to check Python code syntax and style conventions
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/ros/s_ws/src/s/build/s_description
+-- Install configuration: ""
+-- Execute custom install script
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//launch/description.launch.py
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//meshes/OAK-D.dae
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//models/dummy
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//models/home/marker.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//models/home/model.config
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//models/home/model.sdf
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//models/home/model.sdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//models/home/wall.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/base.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/caster.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/depthai_macro.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/gazebo.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/inertials.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/ld06.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/material.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/oakd.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/properties.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/sonar.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/time_of_flight.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//urdf/wheel.urdf.xacro
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//worlds/dummy
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//worlds/home.world
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//worlds/playground.world
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description//worlds/test_world.world
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/ament_index/resource_index/package_run_dependencies/s_description
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/ament_index/resource_index/parent_prefix_path/s_description
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/environment/ament_prefix_path.sh
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/environment/ament_prefix_path.dsv
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/environment/path.sh
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/environment/path.dsv
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/local_setup.bash
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/local_setup.sh
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/local_setup.zsh
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/local_setup.dsv
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/package.dsv
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/ament_index/resource_index/packages/s_description
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/cmake/s_descriptionConfig.cmake
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/cmake/s_descriptionConfig-version.cmake
+-- Symlinking: /home/ros/s_ws/src/s/install/s_description/share/s_description/package.xml

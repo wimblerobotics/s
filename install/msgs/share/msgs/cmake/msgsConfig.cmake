@@ -1,0 +1,1 @@
+/home/ros/s_ws/src/s/build/msgs/ament_cmake_core/msgsConfig.cmake

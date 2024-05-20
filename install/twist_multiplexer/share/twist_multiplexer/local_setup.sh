@@ -1,0 +1,1 @@
+/home/ros/s_ws/src/s/build/twist_multiplexer/ament_cmake_environment_hooks/local_setup.sh
