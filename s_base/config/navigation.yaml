@@ -179,68 +179,89 @@ controller_server:
         "PathAngleCritic",
         "PreferForwardCritic"]
       ConstraintCritic:
+        # This critic penalizes trajectories that have components outside of the set dynamic or kinematic constraints
         enabled: true
-        cost_power: 1
-        cost_weight: 4.0
-      GoalCritic:
-        enabled: true
-        cost_power: 1
-        cost_weight: 5.0
-        threshold_to_consider: 1.4
-      GoalAngleCritic:
-        enabled: true
-        cost_power: 1
-        cost_weight: 3.0
-        threshold_to_consider: 0.5
-      PreferForwardCritic:
-        enabled: true
-        cost_power: 1
-        cost_weight: 5.0
-        threshold_to_consider: 0.5
-      ObstaclesCritic:
-        enabled: true
-        cost_power: 1
-        repulsion_weight: 1.5
-        critical_weight: 20.0
-        consider_footprint: true
-        collision_cost: 10000.0
-        collision_margin_distance: 0.2 # 0.0508
-        near_goal_distance: 0.2
-        inflation_radius: 0.55 # (only in Humble)
-        cost_scaling_factor: 2.0 # (only in Humble)
+        cost_power: 1 # Power order to apply to term.
+        cost_weight: 4.0 # Weight to apply to critic term.
       CostCritic:
+        # incentivizes navigating away from obstacles and critical collisions.
         enabled: true
-        cost_power: 1
-        cost_weight: 3.81
-        critical_cost: 300.0
-        consider_footprint: true
-        collision_cost: 1000000.0
-        near_goal_distance: 1.0
-        trajectory_point_step: 2
+        cost_power: 1 # Power order to apply to term.
+        cost_weight: 3.81 # Weight to apply to critic term.
+        critical_cost: 300.0 # Cost to apply to a pose with any point in in inflated space to prefer distance from obstacles.
+        consider_footprint: true # Whether to use point cost.
+        collision_cost: 1000000.0 # Cost to apply to a true collision in a trajectory.
+        near_goal_distance: 1.0 #  Distance (m) near goal to stop applying preferential obstacle term.
+        trajectory_point_step: 2 # The step to take in trajectories for evaluating them in the critic.
+      GoalCritic:
+        # This critic incentivizes navigating spatially towards the goal when in reasonable proximity to goal.
+        enabled: true
+        cost_power: 1 # Power order to apply to term.
+        cost_weight: 5.0 # Weight to apply to critic term.
+        threshold_to_consider: 0.5 # Minimal distance (m) between robot and goal above which goal distance cost considered,
+      GoalAngleCritic:
+        # This critic incentivizes navigating to achieve the angle of the goal posewhen in reasonable proximity to goal.
+        enabled: true
+        cost_power: 1 # Power order to apply to term.
+        cost_weight: 3.0 # Weight to apply to critic term.
+        threshold_to_consider: 0.5 # Minimal distance (m) between robot and goal above which angle goal cost considered.
+      ObstaclesCritic:
+        # This critic incentivizes navigating away from obstacles and critical collisions.
+        enabled: true
+        cost_power: 1 # Power order to apply to term.
+        repulsion_weight: 5.0 # Weight to apply to critic for generally preferring routes in lower cost space. 
+        critical_weight: 20.0 # Weight to apply to critic for near collisions closer than collision_margin_distancE.
+        consider_footprint: true # Whether to use point cost
+        collision_cost: 10000.0 # Cost to apply to a true collision in a trajectory.
+        collision_margin_distance: 0.0508 # Margin distance (m) from collision to apply severe penalty,
+            # similar to footprint inflation. Between 0.05-0.2 is reasonable. 
+        near_goal_distance: 0.2 # Distance (m) near goal to stop applying preferential obstacle term.
+        inflation_radius: 0.3 # Radius to inflate costmap around lethal obstacles. 
+            # This should be the same as for your inflation layer 
+        cost_scaling_factor: 3.0 # Exponential decay factor across inflation radius. 
+            # This should be the same as for your inflation layer 
       PathAlignCritic:
+        # This critic incentivizes aligning with the global path, if relevant. 
+        # It does not implement path following behavior
         enabled: true
-        cost_power: 1
-        cost_weight: 3.0 ##14.0
-        max_path_occupancy_ratio: 0.05
-        trajectory_point_step: 4
-        threshold_to_consider: 0.5
-        offset_from_furthest: 20
-        use_path_orientations: false
-      PathFollowCritic:
-        enabled: true
-        cost_power: 1
-        cost_weight: 2.0 ## 5.0
-        offset_from_furthest: 5
-        threshold_to_consider: 1.4
+        cost_power: 1 # Power order to apply to term.
+        cost_weight: 20.0 # Weight to apply to critic term.
+        max_path_occupancy_ratio: 0.05 # 0-1 (100%) max portion of path that can be occupied before
+            # before critic not considered, allowing obstacle and path follow.
+        trajectory_point_step: 4 # Step to take in trajectors before evaluating them.
+        threshold_to_consider: 0.5 # If less than this distance to goal, ignore this critic.
+        offset_from_furthest: 2 # Candidate trajectories must be far enough away for consideration.
+        use_path_orientations: true # Set false of SMAC planner does not provide.
       PathAngleCritic:
+        #This critic penalizes trajectories at a high relative angle to the path. 
+        #This helps the robot make sharp turns when necessary due to large accumulated angular errors.
         enabled: true
-        cost_power: 1
-        cost_weight: 1.0 ## 2.0
-        offset_from_furthest: 4
-        threshold_to_consider: 0.5
-        max_angle_to_furthest: 1.0
-        mode: 0
+        cost_power: 1 # Power order to apply to term.
+        cost_weight: 10.0 # Weight to apply to critic term.
+        offset_from_furthest: 2 # Candidate trajectories must be far enough away for consideration.
+        threshold_to_consider: 0.5 # If less than this distance to goal, ignore this critic.
+        max_angle_to_furthest: 0.785398 # Angular distance (rad) between robot and goal above which path angle cost starts being considered
+        mode: 2 # Enum type for mode of operations
+            # 0: Forward pref.
+            # 1: No pref.
+            # 2: Consider feasible path orientation (e.g. from SMAC planner).
+      PathFollowCritic:
+        # This critic incentivizes making progress along the path. 
+        # This is what drives the robot forward along the path.
+        enabled: true
+        cost_power: 1 # Power order to apply to term.
+        cost_weight: 40.0 # Weight to apply to critic term.
+        offset_from_furthest: 5 # Number of path points after furthest one any trajectory achieves to drive path tracking relative to.
+        threshold_to_consider: 1.4 # If less than this distance to goal, ignore this critic.
+            # Set to same as GoalCritic.
+      PreferForwardCritic:
+        # This critic incentivizes moving in the forward direction, rather than reversing.
+        enabled: true
+        cost_power: 1 # Power order to apply to term.
+        cost_weight: 5.0 # Weight to apply to critic term.
+        threshold_to_consider: 0.5 # If less than this distance to goal, ignore this critic.
       # TwirlingCritic:
+        # This critic penalizes unnecessary ‘twisting’ with holonomic vehicles. It adds a constraint on the rotation angle to keep it consistent.
       #   enabled: true
       #   twirling_cost_power: 1
       #   twirling_cost_weight: 10.0
