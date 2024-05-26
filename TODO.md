@@ -1,3 +1,5 @@
+## Sonar3 is publishing zero.
+## Local cost map is filling up from something in forward direction, preventing planning.
 ## Goal path is wiggly.
 ## Travel too close to walls.
 ## sona0Sensor is published at 70 fps, but /wheel_odom is at 9
