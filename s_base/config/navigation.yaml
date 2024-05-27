@@ -267,88 +267,129 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequency: 5.0
-      publish_frequency: 2.0
-      footprint_padding: 0.0
+      always_send_full_costmap: True # Whether to send full costmap every update, rather than updates.
+      footprint_padding: 0.0 # Amount to pad footprint (m).
       footprint: "[[-0.260, -0.170], 
                    [-0.260, 0.170], [-0.110, 0.170], [-0.110, 0.205], [0.110, 0.205], [0.110, 0.170], [0.290, 0.170],
                    [0.290, -0.170],
                    [0.110, -0.170], [0.110, -0.205], [-0.110, -0.205], [-0.110, -0.170]]"
       global_frame: odom
+      height: 3 # Height of costmap (m).
+      initial_transform_timeout: 60.0 # Time to wait for transform to be available before erroring out.
+      lethal_cost_threshold: 100 # Minimum cost of an occupancy grid map to be considered a lethal obstacle.
+      map_topic: /map # Topic of map from map_server or SLAM.
+      origin_x: 0.0 # X origin of the costmap relative to width (m).
+      origin_y: 0.0 # Y origin of the costmap relative to height (m).
+      plugins: ["sonar_layer", "lidar_layer", "oakd_layer", "inflation_layer"]
+      publish_frequency: 2.0 # Frequency to publish costmap to topic.
+      resolution: 0.0508 # Resolution of 1 pixel of the costmap, in meters.
       robot_base_frame: base_link
-      use_sim_time: False
-      rolling_window: true
-      transform_tolerance: 0.3
-      width: 3
-      height: 3
-      resolution: 0.0508
-      plugins: ["range_layer", "obstacle_layer", "inflation_layer"]
-      # plugins: ["range_layer", "voxel_layer", "inflation_layer"]
+      rolling_window: true # Whether costmap should roll with robot base frame.
+      track_unknown_space: True # If false, treats unknown space as free space, else as unknown space.
+      transform_tolerance: 0.3 # TF transform tolerance.
+      trinary_costmap: True # Whether to use trinary or continuous costmap.
+      unknown_cost_value: 255 # Cost of unknown space if tracking it.
+      update_frequency: 5.0 # Costmap update frequency.
+      width: 3 # Width of costmap (m).
+
       inflation_layer:
-        plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 7.0
-        inflation_radius: 0.1
-      obstacle_layer:
-        plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        footprint_clearing_enabled: True
-        max_obstacle_height: 2.0
+        cost_scaling_factor: 7.0 # Exponential decay factor across inflation radius.
+        inflate_around_unknown: False # Whether to inflate unknown cells.
+        inflate_unknown: False # Whether to inflate unknown space.
+        inflation_radius: 0.1 # Radius to inflate costmap around lethal obstacles.
+        plugin: "nav2_costmap_2d::InflationLayer"
+
+      lidar_layer:
+        enabled: True
         combination_method: 1 # 0 => Overwrite, 1 => >Max, 2 => MaxWithoutUnknownOverwrite
-        observation_sources: scan oakd_left_obstacle oakd_right_obstacle
-        scan:
-          topic: /scan
-          expected_update_rate: 10.0
-          data_type: "LaserScan"
-          min_obstacle_height: 0.0
-          max_obstacle_height: 2.0
-          inf_is_valid: False
-          clearing: False ###True
-          marking: True
-          obstacle_max_range: 5.0
-          obstacle_min_range: 0.2
-          raytrace_max_range: 5.0
-          raytrace_min_range: 0.0
-        oakd_left_obstacle: 
-          topic: /oakd_left/stereo/points
-          data_type: "PointCloud2"
-          max_obstacle_height: 2.0
-          min_obstacle_height: 0.01
-          obstacle_max_range: 5.0
-          obstacle_min_range: 0.0
-          clearing: False
-          marking: True
-        oakd_right_obstacle:
-          topic: /oakd_right/stereo/points
-          data_type: "PointCloud2"
-          max_obstacle_height: 2.0
-          min_obstacle_height: 0.01
-          obstacle_max_range: 5.0
-          obstacle_min_range: 0.0
-          clearing: False
-          marking: True
+        footprint_clearing_enabled: True # Clear any occupied cells under robot footprint.
+        max_obstacle_height: 2.0 # Maximum height to add return to occupancy grid.
         map_subscribe_transient_local: True
-      range_layer:
-        buffer_size: 10
-        clear_after_reading: True
-        clear_on_max_reading: True ##
-        clear_threshold: 0.2 ##
-        enabled: True ##
-        inf_is_invalid: False
-        input_sensor_type: "All" ##
-        mark_threshold: 0.8 ##
-        max_distance: 1.0
-        min_distance: 0.2
-        observation_persistence: 2.0
+        observation_sources: scan
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        scan:
+          clearing: True # Whether source should raytrace clear in costmap.
+          expected_update_rate: 8.0 # Expected rate to get new data from sensor.
+          data_type: "LaserScan" # Data type of input, LaserScan or PointCloud2.
+          inf_is_valid: False # Are infinite returns from laser scanners valid measurements to raycast.
+          marking: True # Whether source should mark in costmap.
+          max_obstacle_height: 2.0 # Maximum height to add return to occupancy grid.
+          min_obstacle_height: 0.0 # Minimum height to add return to occupancy grid.
+          obstacle_max_range: 5.0 # Maximum range to mark obstacles in costmap.
+          obstacle_min_range: 0.2 # Minimum range to mark obstacles in costmap.
+          raytrace_max_range: 5.0 # Maximum range to raytrace clear obstacles from costmap.
+          raytrace_min_range: 0.0 # Minimum range to raytrace clear obstacles from costmap.
+          topic: /scan # Topic of data.
+
+      oakd_layer:
+        enabled: True
+        combination_method: 1 # 0 => Overwrite, 1 => >Max, 2 => MaxWithoutUnknownOverwrite
+        footprint_clearing_enabled: True # Clear any occupied cells under robot footprint.
+        max_obstacle_height: 2.0 # Maximum height to add return to occupancy grid.
+        mark_threshold: 0 # Minimum number of voxels in a column to mark as occupied in 2D occupancy grid.
+        observation_sources: oakd_left_obstacle oakd_right_obstacle
+        origin_z: 0.0 # Where to start marking voxels (m).
+        plugin: "nav2_costmap_2d::VoxelLayer"
+        publish_voxel_map: False # Whether to publish 3D voxel grid for debug, computationally expensive.
+        unknown_threshold: 15 # Minimum number of empty voxels in a column to mark as unknown in 2D occupancy grid.
+        z_resolution: 0.0508 # Resolution of voxels in height (m).
+        z_voxels: 10 # Number of voxels high to mark, maximum 16.
+
+        oakd_left_obstacle:
+          clearing: True # Whether source should raytrace clear in costmap.
+          data_type: "PointCloud2" # Data type of input, LaserScan or PointCloud2.
+          # expected_update_rate: 8.0 # Expected rate to get new data from sensor.
+          inf_is_valid: False # Are infinite returns from laser scanners valid measurements to raycast.
+          marking: True # Whether source should mark in costmap.
+          max_obstacle_height: 2.0 # Maximum height to add return to occupancy grid.
+          min_obstacle_height: 0.01 # Minimum height to add return to occupancy grid.
+          observation_persistence: 0.0 # How long to store messages in a buffer to add to costmap before removing them (s).
+          obstacle_max_range: 5.0 # Maximum range to mark obstacles in costmap.
+          obstacle_min_range: 0.0 # Minimum range to mark obstacles in costmap.
+          raytrace_max_range: 5.0 # Maximum range to raytrace clear obstacles from costmap.
+          raytrace_min_range: 0.0 # Minimum range to raytrace clear obstacles from costmap.
+          topic: /oakd_left/stereo/points # Topic of data.
+        oakd_right_obstacle:
+          clearing: True # Whether source should raytrace clear in costmap.
+          data_type: "PointCloud2" # Data type of input, LaserScan or PointCloud2.
+          # expected_update_rate: 8.0 # Expected rate to get new data from sensor.
+          inf_is_valid: False # Are infinite returns from laser scanners valid measurements to raycast.
+          marking: True # Whether source should mark in costmap.
+          max_obstacle_height: 2.0 # Maximum height to add return to occupancy grid.
+          min_obstacle_height: 0.01 # Minimum height to add return to occupancy grid.
+          observation_persistence: 0.0 # How long to store messages in a buffer to add to costmap before removing them (s).
+          obstacle_max_range: 5.0 # Maximum range to mark obstacles in costmap.
+          obstacle_min_range: 0.0 # Minimum range to mark obstacles in costmap.
+          raytrace_max_range: 5.0 # Maximum range to raytrace clear obstacles from costmap.
+          raytrace_min_range: 0.0 # Minimum range to raytrace clear obstacles from costmap.
+          topic: /oakd_right/stereo/points # Topic of data.
+        map_subscribe_transient_local: True
+
+      sonar_layer:
+        clear_on_max_reading: True # Whether to clear the sensor readings on max range.
+        clear_threshold: 0.2 # Probability below which cells are marked as free.
+        combination_method: 1 # 0 => Overwrite, 1 => >Max, 2 => MaxWithoutUnknownOverwrite
+        enabled: True
+        inf_is_valid: False # Are infinite returns from laser scanners valid measurements to raycast.
+        inflate_cone: 1.0 # Inflate the triangular area covered by the sensor (percentage).
+        input_sensor_type: "ALL" # Input sensor type is either ALL (automatic selection),
+            # VARIABLE (min range != max range), 
+            # or FIXED (min range == max range).
+        mark_threshold: 0.8 # Probability above which cells are marked as obstacles.
+        no_readings_timeout: 0.0 # If zero, this parameter has no effect.
+            # Otherwise if the layer does not receive sensor data for this amount of time, 
+            # the layer will warn the user and the layer will be marked as not current.
+        phi: 1.2 # Phi value
         plugin: "nav2_costmap_2d::RangeSensorLayer"
-        topics: ##
+        topics: # Range topics to subscribe to.
           [
             "/sonar0Sensor",
             "/sonar1Sensor",
             "/sonar2Sensor",
             "/sonar3Sensor",
           ]
-        transform_tolerance: 0.3
-      always_send_full_costmap: True
+        transform_tolerance: 0.3 # TF transform tolerance.
 
 global_costmap:
   global_costmap:
