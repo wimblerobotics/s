@@ -1,3 +1,4 @@
+## Copy teleop_keyboard for custom default speeds: currently:	speed 0.1376876976544066	turn 0.12157665459056936 
 ## Sonar3 is publishing zero.
 ## Local cost map is filling up from something in forward direction, preventing planning.
 ## Goal path is wiggly.
