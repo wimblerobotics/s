@@ -1,0 +1,3 @@
+[submodule "ldlidar"]
+	path = ldlidar
+	url = https://github.com/wimblerobotics/ldlidar.git
