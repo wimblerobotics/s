@@ -1,0 +1,25 @@
+running develop
+/usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+running egg_info
+creating py_scripts.egg-info
+writing py_scripts.egg-info/PKG-INFO
+writing dependency_links to py_scripts.egg-info/dependency_links.txt
+writing entry points to py_scripts.egg-info/entry_points.txt
+writing requirements to py_scripts.egg-info/requires.txt
+writing top-level names to py_scripts.egg-info/top_level.txt
+writing manifest file 'py_scripts.egg-info/SOURCES.txt'
+reading manifest file 'py_scripts.egg-info/SOURCES.txt'
+writing manifest file 'py_scripts.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/ros/s_ws/src/s/install/py_scripts/lib/python3.10/site-packages/py-scripts.egg-link (link to .)
+Installing measure_wifi script to /home/ros/s_ws/src/s/install/py_scripts/lib/py_scripts
+Installing show_time_skew script to /home/ros/s_ws/src/s/install/py_scripts/lib/py_scripts
+
+Installed /home/ros/s_ws/src/s/build/py_scripts
+running symlink_data
+creating /home/ros/s_ws/src/s/install/py_scripts/share/ament_index
+creating /home/ros/s_ws/src/s/install/py_scripts/share/ament_index/resource_index
+creating /home/ros/s_ws/src/s/install/py_scripts/share/ament_index/resource_index/packages
+symbolically linking /home/ros/s_ws/src/s/build/py_scripts/resource/py_scripts -> /home/ros/s_ws/src/s/install/py_scripts/share/ament_index/resource_index/packages
+symbolically linking /home/ros/s_ws/src/s/build/py_scripts/package.xml -> /home/ros/s_ws/src/s/install/py_scripts/share/py_scripts

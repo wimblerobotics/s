@@ -1,5 +1,9 @@
+## Sonar3 is publishing zero.
+## Local cost map is filling up from something in forward direction, preventing planning.
+## Goal path is wiggly.
+## Travel too close to walls.
 ## sona0Sensor is published at 70 fps, but /wheel_odom is at 9
-## Following path is not smooth enough
+## Get various cmd_vel publishers (8) to go through the multiplexer
 
 ## speed test on raven
 ros@amdb:~/s_ws/src/s/s_base/config$ speedtest-cli --secure
@@ -13,6 +17,22 @@ Download: 29.96 Mbit/s
 Testing upload speed......................................................................................................
 Upload: 33.80 Mbit/s
 
+--- 2024 05 21
+ speedtest -I wlp8s0
+   Speedtest by Ookla
+
+[error] Error: [101] Network unreachable
+      Server: Fastmetrics Inc. - San Francisco, CA (id: 5754)
+         ISP: T-Mobile USA
+Idle Latency:    42.78 ms   (jitter: 2.16ms, low: 37.22ms, high: 45.43ms)
+    Download:    27.70 Mbps (data used: 43.4 MB)                                                   
+                109.50 ms   (jitter: 32.74ms, low: 53.08ms, high: 323.81ms)
+      Upload:    12.63 Mbps (data used: 13.3 MB)                                                   
+                465.70 ms   (jitter: 83.38ms, low: 46.42ms, high: 1161.07ms)
+ Packet Loss:     0.0%
+  Result URL: https://www.speedtest.net/result/c/ae41d433-e34d-4974-a877-e6279271ce02
+
+
 ## speed test on Linux box
 ros@amdc:~$ speedtest-cli --secure
 Retrieving speedtest.net configuration...
@@ -23,3 +43,15 @@ Hosted by Onward (San Jose, CA) [68.76 km]: 30.787 ms
 Testing download speed................................................................................
 Download: 144.90 Mbit/s
 Testing upload speed......................................................................................................
+
+--- 2024 05 21 using WiFi
+ros@amdc:~$ speedtest
+Retrieving speedtest.net configuration...
+Testing from T-Mobile USA (172.56.42.2)...
+Retrieving speedtest.net server list...
+Selecting best server based on ping...
+Hosted by Sonic.net, Inc. (San Jose, CA) [1145.87 km]: 47.067 ms
+Testing download speed................................................................................
+Download: 43.47 Mbit/s
+Testing upload speed......................................................................................................
+Upload: 11.04 Mbit/s
