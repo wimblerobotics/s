@@ -1,1 +1,0 @@
-/home/ros/s_ws/src/s/build/rviz/ament_cmake_environment_hooks/local_setup.zsh

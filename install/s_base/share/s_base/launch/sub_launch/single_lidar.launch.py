@@ -1,1 +1,0 @@
-/home/ros/s_ws/src/s/s_base/launch/sub_launch/single_lidar.launch.py

@@ -1,1 +1,0 @@
-/home/ros/s_ws/src/s/build/s_description/ament_cmake_core/s_descriptionConfig.cmake

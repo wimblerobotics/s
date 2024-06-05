@@ -5,7 +5,7 @@ import yaml
 
 # import launch
 import launch_ros.actions
-# from launch import LaunchDescription
+from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -95,30 +95,6 @@ def generate_launch_description():
     )
     common.ld.add_action(description_launch)
 
-    # # Bring up the LIDAR multiplexer
-    # lidar_multiplexer = launch_ros.actions.Node(
-    #         package='ira_laser_tools',
-    #         executable='laserscan_multi_merger',
-    #         name='laserscan_multi_merger',
-    #         parameters=[{
-    #                 "destination_frame": "base_link",
-    #                 "cloud_destination_topic": "/merged_lidar_cloud",
-    #                 "scan_destination_topic": "/scan",
-    #                 "laserscan_topics": "/scan_left_front /scan_right_rear",
-    #                 "angle_min": -3.14159,
-    #                 "angle_max": 3.14159,
-    #                 "angle_increment": 0.013935472816228867,
-    #                 "scan_time": 0.010,
-    #                 "range_min": 0.1,
-    #                 "range_max": 10.0,
-    #                 "max_merge_time_diff": 1000000000.0,
-    #                 # "allow_scan_delay": use_sim_time, # -- code does not read this properly
-    #         }],
-    #         # prefix=["xterm -geometry 200x30 -e gdb -ex run --args"],
-    #         output='screen'
-    # )
-    # common.ld.add_action(lidar_multiplexer)
-
     # Bring up the navigation stack.
     nav2_launch_path = PathJoinSubstitution(
         [FindPackageShare('nav2_bringup'), 'launch', 'bringup_launch.py']
@@ -144,25 +120,25 @@ def generate_launch_description():
 
     # slam_config_path = os.path.join(common.s_base_directory_path, 'config', 'slam.yaml')        
     
-    # # slam_launch = IncludeLaunchDescription(
-    # #     PythonLaunchDescriptionSource(slam_launch_path),
-    # #     launch_arguments={
-    # #         'use_sim_time': 'true', #str(use_sim_time),
-    # #         'slam_params_file': slam_config_path
-    # #     }.items(),
-    # #     condition=IfCondition(do_mapping)
-    # # )
-    # # common.ld.add_action(slam_launch)
+    # # # slam_launch = IncludeLaunchDescription(
+    # # #     PythonLaunchDescriptionSource(slam_launch_path),
+    # # #     launch_arguments={
+    # # #         'use_sim_time': 'true', #str(use_sim_time),
+    # # #         'slam_params_file': slam_config_path
+    # # #     }.items(),
+    # # #     condition=IfCondition(do_mapping)
+    # # # )
+    # # # common.ld.add_action(slam_launch)
 
-    cart_launch_path = PathJoinSubstitution(
-        [FindPackageShare('s_base'), 'launch', 'cartographer.launch.py']
-    )
-    cartographer_config_dir = [FindPackageShare('s_base'), 'config', 'turtlebot3_lds_2d.lua']
-    cart_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([cart_launch_path]),
-        condition=IfCondition(do_mapping)
-    )
-    common.ld.add_action(cart_launch)
+    # cart_launch_path = PathJoinSubstitution(
+    #     [FindPackageShare('s_base'), 'launch', 'cartographer.launch.py']
+    # )
+    # cartographer_config_dir = [FindPackageShare('s_base'), 'config', 'turtlebot3_lds_2d.lua']
+    # cart_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([cart_launch_path]),
+    #     condition=IfCondition(do_mapping)
+    # )
+    # common.ld.add_action(cart_launch)
     
     return common.ld
 

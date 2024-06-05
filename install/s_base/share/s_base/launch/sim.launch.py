@@ -1,1 +1,0 @@
-/home/ros/s_ws/src/s/s_base/launch/sim.launch.py

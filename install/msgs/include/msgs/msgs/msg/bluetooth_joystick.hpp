@@ -1,1 +1,0 @@
-/home/ros/s_ws/src/s/build/msgs/rosidl_generator_cpp/msgs/msg/bluetooth_joystick.hpp

@@ -1,1 +1,0 @@
-/home/ros/s_ws/src/s/build/msgs/rosidl_typesupport_fastrtps_c/msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
