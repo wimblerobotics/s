@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "foo.launch.py",
+        "type": "ros",
+        "request": "launch",
+        "target": "/home/ros/s_ws/install/s_base/share/s_base/launch/foo.launch.py"
+      },
+      
+      {
+        "name": "sim.launch.py",
+        "type": "ros",
+        "request": "launch",
+        "target": "/home/ros/s_ws/install/s_base/share/s_base/launch/sim.launch.py"
+      }
+    ]
+  }
