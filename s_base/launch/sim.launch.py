@@ -17,20 +17,22 @@ from ament_index_python.packages import get_package_share_directory
 s_sub_launch_path = os.path.join(get_package_share_directory('s_base'),
                                     'launch', 'sub_launch')
 sys.path.append(s_sub_launch_path)
-import common
-
 def generate_launch_description():
 
     use_sim_time = True
-    
+    s_base_directory_path = get_package_share_directory('s_base')
+    s_description_directory_path = get_package_share_directory('s_description')
+    ekf_config_path = os.path.join(s_base_directory_path, 'config/ekf.yaml')
+    map_path = os.path.join(s_base_directory_path, 'maps', 'map_sim.yaml')
+    ld = LaunchDescription()
     do_mapping = LaunchConfiguration('do_mapping')
-    common.ld.add_action(DeclareLaunchArgument(
+    ld.add_action(DeclareLaunchArgument(
         name='do_mapping', 
         default_value='false',
         description='true=>use slam_toolbox to map, false=>use AMCL to localize'))
 
     world_path = PathJoinSubstitution(
-        [FindPackageShare("s_description"), "worlds", "home.world"]
+        [FindPackageShare("s_description"), "worlds", "cone.world"]
     )
 
     # Bring up gazebo
@@ -38,7 +40,7 @@ def generate_launch_description():
             cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so',  '-s', 'libgazebo_ros_init.so', world_path],
             output='screen'
     )
-    common.ld.add_action(gazebo)
+    ld.add_action(gazebo)
 
     # Bring up the robot model
     spawn_entity = launch_ros.actions.Node(
@@ -52,7 +54,7 @@ def generate_launch_description():
         ],
         output='screen'
     )
-    common.ld.add_action(spawn_entity)
+    ld.add_action(spawn_entity)
 
     # Republish /scan_top_lidar to /scan
     scan_pub = launch_ros.actions.Node(
@@ -67,7 +69,7 @@ def generate_launch_description():
             }
         ]
     )
-    common.ld.add_action(scan_pub)
+    ld.add_action(scan_pub)
 
     # Bring of the EKF node.
     ekf_filter_node = launch_ros.actions.Node(
@@ -77,41 +79,41 @@ def generate_launch_description():
         output='screen',
         parameters=[ 
             {'use_sim_time': use_sim_time},
-            common.ekf_config_path,
+            ekf_config_path,
         ],
         remappings=[('odometry/filtered', 'odom')]
     )
-    common.ld.add_action(ekf_filter_node)
+    ld.add_action(ekf_filter_node)
 
     # Bring up the robot description (URDF).
     description_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            common.s_description_directory_path, '/launch/description.launch.py'
+            s_description_directory_path, '/launch/description.launch.py'
         ]),
         launch_arguments={
             'use_sim_time': str(use_sim_time),
             'publish_joints': 'false'
         }.items()
     )
-    common.ld.add_action(description_launch)
+    ld.add_action(description_launch)
 
     # Bring up the navigation stack.
     nav2_launch_path = PathJoinSubstitution(
         [FindPackageShare('nav2_bringup'), 'launch', 'bringup_launch.py']
     )
 
-    nav2_config_path =os.path.join(common.s_base_directory_path, 'config', 'navigation.yaml')
+    nav2_config_path =os.path.join(s_base_directory_path, 'config', 'navigation_sim.yaml')
 
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(nav2_launch_path),
         launch_arguments={
-            'map': common.map_path,
+            'map': map_path,
             'use_sim_time': str(use_sim_time),
             'params_file': nav2_config_path
         }.items(),
         condition=UnlessCondition(do_mapping)
     )
-    common.ld.add_action(nav2_launch)
+    ld.add_action(nav2_launch)
 
     # Bring up SLAM.
     slam_launch_path = PathJoinSubstitution(
@@ -128,7 +130,7 @@ def generate_launch_description():
     # # #     }.items(),
     # # #     condition=IfCondition(do_mapping)
     # # # )
-    # # # common.ld.add_action(slam_launch)
+    # # # ld.add_action(slam_launch)
 
     # cart_launch_path = PathJoinSubstitution(
     #     [FindPackageShare('s_base'), 'launch', 'cartographer.launch.py']
@@ -138,9 +140,9 @@ def generate_launch_description():
     #     PythonLaunchDescriptionSource([cart_launch_path]),
     #     condition=IfCondition(do_mapping)
     # )
-    # common.ld.add_action(cart_launch)
+    # ld.add_action(cart_launch)
     
-    return common.ld
+    return ld
 
 # Copyright (c) 2024 Michael Wimble
 # Permission is hereby granted, free of charge, to any person obtaining a copy
