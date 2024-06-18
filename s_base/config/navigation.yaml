@@ -199,7 +199,7 @@ controller_server:
       GoalDist:
         scale: 20.0  # 24.0
       PathAlign:
-        forward_point_distance: 0.2 # 0.0508
+        forward_point_distance: 0.4 # 0.0508
         scale: 32.0 # 32.0
       PathDist:
         scale: 32.0 # 32.0
