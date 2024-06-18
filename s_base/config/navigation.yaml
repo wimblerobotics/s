@@ -205,7 +205,7 @@ controller_server:
         scale: 32.0 # 32.0
       RotateToGoal:
         lookahead_time: 0.5 # -1.0
-        scale: 4.0
+        scale: 8.0
         slowing_factor: 5.0
 
 controller_server_rclcpp_node:
