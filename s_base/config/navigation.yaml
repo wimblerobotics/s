@@ -147,7 +147,7 @@ controller_server:
 
     # General goal checker parameters
     general_goal_checker:
-      stateful: True # Whether to check for XY position tolerance after rotating to goal orientation
+      stateful: False # Whether to check for XY position tolerance after rotating to goal orientation
           # in case of minor localization changes.
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 0.15
@@ -155,23 +155,23 @@ controller_server:
     # DWB parameters
     FollowPath:
       plugin: "dwb_core::DWBLocalPlanner"
-      debug_trajectory_details: True
+      debug_trajectory_details: False
       min_vel_x: -0.01 # 0.0
       min_vel_y: 0.0
       max_vel_x: 0.2 # 0.26
       max_vel_y: 0.0
-      max_vel_theta: 1.0
+      max_vel_theta: 0.5
       min_speed_xy: 0.0
       max_speed_xy: 0.26
-      min_speed_theta: -1.0 # 0.0
+      min_speed_theta: -0.5
       # Add high threshold velocity for turtlebot 3 issue.
       # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
       acc_lim_x: 1.0
       acc_lim_y: 0.0
-      acc_lim_theta: 3.2
+      acc_lim_theta: 1.0
       decel_lim_x: -1.0
       decel_lim_y: 0.0
-      decel_lim_theta: -3.2
+      decel_lim_theta: -1.0
       vx_samples: 50 # 20
       vy_samples: 5
       vtheta_samples: 50 # 20
@@ -179,8 +179,8 @@ controller_server:
       linear_granularity: 0.05
       angular_granularity: 0.025
       transform_tolerance: 0.2
-      xy_goal_tolerance: 0.25
-      trans_stopped_velocity: 0.25
+      xy_goal_tolerance: 0.1
+      trans_stopped_velocity: 0.05
       short_circuit_trajectory_evaluation: True
       stateful: True
       critics: [
@@ -200,12 +200,12 @@ controller_server:
         scale: 20.0  # 24.0
       PathAlign:
         forward_point_distance: 0.1 # 0.0508
-        scale: 68.0 # 32.0
+        scale: 32.0 # 32.0
       PathDist:
-        scale: 20.0 # 32.0
+        scale: 32.0 # 32.0
       RotateToGoal:
         lookahead_time: 0.5 # -1.0
-        scale: 32.0
+        scale: 4.0
         slowing_factor: 5.0
 
 controller_server_rclcpp_node:
@@ -217,11 +217,11 @@ local_costmap:
     ros__parameters:
       use_sim_time: True
       # always_send_full_costmap: True # Whether to send full costmap every update, rather than updates.
-      # footprint_padding: 0.0254 # 0.0508 # Amount to pad footprint (m).
-      # footprint: "[[-0.260, -0.170], 
-      #              [-0.260, 0.170], [-0.110, 0.170], [-0.110, 0.205], [0.110, 0.205], [0.110, 0.170], [0.290, 0.170],
-      #              [0.290, -0.170],
-      #              [0.110, -0.170], [0.110, -0.205], [-0.110, -0.205], [-0.110, -0.170]]"
+      footprint_padding: 0.0254 # 0.0508 # Amount to pad footprint (m).
+      footprint: "[[-0.260, -0.170], 
+                   [-0.260, 0.170], [-0.110, 0.170], [-0.110, 0.205], [0.110, 0.205], [0.110, 0.170], [0.290, 0.170],
+                   [0.290, -0.170],
+                   [0.110, -0.170], [0.110, -0.205], [-0.110, -0.205], [-0.110, -0.170]]"
       global_frame: odom
       height: 3 # Height of costmap (m).
       # initial_transform_timeout: 60.0 # Time to wait for transform to be available before erroring out.
@@ -232,7 +232,7 @@ local_costmap:
       publish_frequency: 2.0 # Frequency to publish costmap to topic.
       resolution: 0.0508 # Resolution of 1 pixel of the costmap, in meters.
       robot_base_frame: base_link
-      robot_radius: 0.28 # Radius of robot base (m).
+      # robot_radius: 0.28 # Radius of robot base (m).
       rolling_window: True # Whether costmap should roll with robot base frame.
       # track_unknown_space: True # If false, treats unknown space as free space, else as unknown space.
       # transform_tolerance: 0.3 # TF transform tolerance.
@@ -249,7 +249,7 @@ local_costmap:
 
       inflation_layer:
         enabled: True
-        cost_scaling_factor: 3.0 # Exponential decay factor across inflation radius.
+        cost_scaling_factor: 2.0 # Exponential decay factor across inflation radius.
         inflate_around_unknown: True # Whether to inflate unknown cells.
         inflate_unknown: False # Whether to inflate unknown space.
         inflation_radius: 0.3 # Radius to inflate costmap around lethal obstacles.
