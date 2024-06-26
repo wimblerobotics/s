@@ -119,7 +119,7 @@ controller_server:
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
       required_movement_radius: 0.5
-      movement_time_allowance: 10.0
+      movement_time_allowance: 5.0
 
     # Goal checker parameters
     general_goal_checker:
@@ -148,7 +148,7 @@ controller_server:
       decel_lim_y: 0.0
       decel_lim_theta: -3.2
       vx_samples: 50 # 20
-      vy_samples: 5
+      vy_samples: 50
       vtheta_samples: 50 # 20
       sim_time: 2.0 # 1.7
       linear_granularity: 0.05
@@ -158,22 +158,43 @@ controller_server:
       trans_stopped_velocity: 0.25
       short_circuit_trajectory_evaluation: True
       stateful: True
-      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle:
-        scale: 0.4 # 0.02
+      critics: [
+        "ObstacleFootprint",
+        "GoalAlign",
+        "GoalDist",
+        "PathAlign",
+        "PathDist"]
+      # critics: ["ObstacleFootprint", "PreferForward", "RotateToGoal", "Oscillation", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
+      ObstacleFootprint:
+        # Scores a trajectory based on verifying all points along the robot’s
+        # footprint don’t touch an obstacle marked in the costmap.
+        scale: 3.0
+        sum_scores: True
+      # BaseObstacle:
+      #   # Scores a trajectory based on where the path passes over the costmap. 
+      #   # To use this properly, you must use the inflation layer in costmap
+      #   # to expand obstacles by the robot’s radius.
+      #   scale: 5.0 # 0.02
       GoalAlign:
-        scale: 15.0 # 24.0
-        forward_point_distance: 0.1
+        # Scores a trajectory based on how well aligned the trajectory is with the goal pose.
+        scale: 5.0
+        forward_point_distance: 0.1 # Point in front of robot to look ahead to compute angular change from.
       GoalDist:
-        scale: 20.0  # 24.0
+        # Scores a trajectory based on how close the trajectory gets the robot to the goal pose.
+        scale: 5.0
       PathAlign:
-        forward_point_distance: 0.1 # 0.0508
-        scale: 68.0 # 32.0
+        # Scores a trajectory based on how well it is aligned to the path provided by the global planner.
+        forward_point_distance: 0.1 # Point in front of robot to look ahead to compute angular change from.
+        scale: 20.0
       PathDist:
-        scale: 20.0 # 32.0
+        # cores a trajectory based on how well it is aligned to the path provided by the global planner.
+        scale: 35.0
+      PreferForward:
+        scale: 5.0
       RotateToGoal:
+        # Only allows the robot to rotate to the goal orientation when it is sufficiently close to the goal location.
         lookahead_time: 0.5 # -1.0
-        scale: 32.0
+        scale: 5.0
         slowing_factor: 5.0
 controller_server_rclcpp_node:
   ros__parameters:
@@ -183,11 +204,11 @@ local_costmap:
   local_costmap:
     ros__parameters:
       always_send_full_costmap: True # Whether to send full costmap every update, rather than updates.
-      footprint_padding: 0.0254 # 0.0508 # Amount to pad footprint (m).
-      footprint: "[[-0.260, -0.170], 
-                   [-0.260, 0.170], [-0.110, 0.170], [-0.110, 0.205], [0.110, 0.205], [0.110, 0.170], [0.290, 0.170],
-                   [0.290, -0.170],
-                   [0.110, -0.170], [0.110, -0.205], [-0.110, -0.205], [-0.110, -0.170]]"
+      # footprint_padding: 0.0254 # 0.0508 # Amount to pad footprint (m).
+      # footprint: "[[-0.260, -0.170], 
+      #              [-0.260, 0.170], [-0.110, 0.170], [-0.110, 0.205], [0.110, 0.205], [0.110, 0.170], [0.290, 0.170],
+      #              [0.290, -0.170],
+      #              [0.110, -0.170], [0.110, -0.205], [-0.110, -0.205], [-0.110, -0.170]]"
       global_frame: odom
       height: 3 # Height of costmap (m).
       initial_transform_timeout: 60.0 # Time to wait for transform to be available before erroring out.
@@ -198,6 +219,7 @@ local_costmap:
       publish_frequency: 2.0 # Frequency to publish costmap to topic.
       resolution: 0.0508 # Resolution of 1 pixel of the costmap, in meters.
       robot_base_frame: base_link
+      robot_radius: 0.22
       rolling_window: true # Whether costmap should roll with robot base frame.
       track_unknown_space: True # If false, treats unknown space as free space, else as unknown space.
       transform_tolerance: 0.3 # TF transform tolerance.
@@ -211,10 +233,10 @@ local_costmap:
       plugins: ["lidar_layer", "inflation_layer"]
       inflation_layer:
         enabled: True
-        cost_scaling_factor: 3.0 # 4.0 # Exponential decay factor across inflation radius.
+        cost_scaling_factor: 32.0 # 4.0 # Exponential decay factor across inflation radius.
         inflate_around_unknown: False # Whether to inflate unknown cells.
         inflate_unknown: False # Whether to inflate unknown space.
-        inflation_radius: 0.1 # 0.3 # Radius to inflate costmap around lethal obstacles.
+        inflation_radius: 0.2 # 0.3 # Radius to inflate costmap around lethal obstacles.
         plugin: "nav2_costmap_2d::InflationLayer"
 
       lidar_layer:
@@ -279,7 +301,7 @@ global_costmap:
         enabled: True
         # inflate_around_unknown: False # Whether to inflate unknown cells.
         # inflate_unknown: False # Whether to inflate unknown space.
-        inflation_radius: 0.4 # Radius to inflate costmap around lethal obstacles.
+        inflation_radius: 0.6 # Radius to inflate costmap around lethal obstacles.
         plugin: "nav2_costmap_2d::InflationLayer"
       # inflation_layer:
       #   plugin: "nav2_costmap_2d::InflationLayer"
