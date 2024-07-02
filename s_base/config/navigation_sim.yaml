@@ -104,101 +104,160 @@ bt_navigator_rclcpp_node:
 
 controller_server:
   ros__parameters:
-    controller_frequency: 20.0
-    controller_plugins: ["FollowPath"]
+    controller_frequency: 20.0 # Frequency to run controller (Hz). cmd_vel will be published at the frequency.
+    controller_plugins: ["FollowPath"] # List of mapped names for controller plugins for processing requests and parameters.
     failure_tolerance: 0.3 # Max duration controller plugin can fail before FollowPath action fails.
     goal_checker_plugins: ["general_goal_checker"] # Mapped name for goal checker plugin for checking goal is reached. 
-    min_theta_velocity_threshold: 0.001 # Set z-vel to zero if less than this.
-    min_x_velocity_threshold: 0.001 # Set x-vel to zero if less than this.
-    min_y_velocity_threshold: 0.0 # Set y-vel to zero if less than this.
-    progress_checker_plugin: "progress_checker" # Mapped name for progress checker plugin for checking progress made by robot.
+    min_theta_velocity_threshold: 0.001 # Set cmd_vel theta-velocity to zero if less than this.
+    min_x_velocity_threshold: 0.001 # Set cmd_vel x-velocity to zero if less than this.
+    min_y_velocity_threshold: 0.0 # Set cmd_vel y-velocity to zero if less than this.
+    odom_topic: "odom" # Topic to get instantaneous measurement of speed from
+    progress_checker_plugins: ["progress_checker"] # Mapped name for progress checker plugin for checking progress made by robot.
+    speed_limit_topic: "speed_limit" # Speed limiting topic name to subscribe.
     use_realtime_priority: False # Note, requires edit of /etc/security/limits.conf
-    use_sim_time: false
+    use_sim_time: False
 
     # Progress checker parameters
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
-      required_movement_radius: 0.5
-      movement_time_allowance: 5.0
+      movement_time_allowance: 3.0 # Maximum amount of time a robot has to move the minimum radius (s).
+      required_movement_radius: 0.2 # Minimum amount a robot must move to be progressing to goal (m).
 
     # Goal checker parameters
     general_goal_checker:
-      stateful: true
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.25
-      yaw_goal_tolerance: 0.25
+      stateful: True # True => goal checker will not check if the xy position matches again once it is found to be true.
+      xy_goal_tolerance: 0.0508       # Tolerance to meet goal completion criteria (m).
+      yaw_goal_tolerance: 0.08726639  # Tolerance to meet goal completion criteria (rad).
+
     # DWB parameters
     FollowPath:
+      # KinematicsHandler parameters
+      acc_lim_theta: 5.0      # Maximum acceleration theta (rad/s^2).
+      acc_lim_x: 2.5          # Maximum acceleration X (m/s^2).
+      acc_lim_y: 0.0          # Maximum acceleration Y (m/s^2).
+      decel_lim_theta: -5.0   # Maximum deceleration theta (rad/s^2).
+      decel_lim_x: -2.5       # Maximum deceleration X (m/s^2).
+      decel_lim_y: 0.0        # Maximum deceleration Y (m/s^2).
+      max_speed_xy: 0.26      # Maximum translational speed (m/s).
+      max_vel_theta: 3.14     # Maximum angular velocity (rad/s).
+      max_vel_x: 0.5          # Maximum velocity X (m/s).
+      max_vel_y: 0.0          # Maximum velocity Y (m/s).
+      min_speed_theta: -3.14  # Minimum angular speed (rad/s).
+      min_speed_xy: 0.0       # Minimum translational speed (m/s).
+      min_vel_x: -0.01        # Minimum velocity X (m/s).
+      min_vel_y: 0.0          # Minimum velocity Y (m/s).
+      xy_goal_tolerance: 0.05 # Tolerance to meet goal completion criteria (m).
+
+      # Publisher parameters
+      marker_lifetime: 0.2              # Lifetime of the markers (s).
+      publish_cost_grid_pc: False       # Whether to publish the cost grid as a PointCloud.
+      publish_evaluation: False         # Whether to publish the evaluation of the trajectory.
+      publish_global_plan: True         # Whether to publish the global plan.
+      publish_local_plan: True          # Whether to publish the local plan.
+      publish_transformed_plan: False   # Whether to publish the transformed plan.
+      publish_trajectories: False       # Whether to publish the trajectories.
+
+      # StandardTrajectoryGenerator parameters
+      angular_granularity: 0.025  # Granularity of the trajectory (rad).
+      discretize_by_time: True   # Whether to discretize the trajectory by time or by distance.
+      include_last_point: True    # Whether to include the last point in the trajectory.
+      linear_granularity: 0.05    # Granularity of the trajectory (m).
+      sim_time: 2.0               # Time to simulate ahead by (s).
+      time_granularity: 0.05       # Time between points in the trajectory (s).
+
+      # XYThetaIterator parameters
+      vtheta_samples: 50  # Number of velocity samples in the angular directions.
+      vx_samples: 20      # Number of velocity samples in the X velocity direction.
+      vy_samples: 20      # Number of velocity samples in the Y velocity direction.
+
+      # DWB Controller parameters.
+      debug_trajectory_details: False           # Whether to log the trajectory details for debugging.
+      default_critic_namespaces: ["dwb_critics"]  # Namespaces to load critics in.
+      forward_prune_distance: 1.0               # If prune_plan => true, prune the plan to this distance in 
+                                                # front of the robot's current pose (m).
+      goal_checker_name: "nav2_controller::SimpleGoalChecker" # Name of the goal checker plugin.
       plugin: "dwb_core::DWBLocalPlanner"
-      debug_trajectory_details: True
-      min_vel_x: -0.01 # 0.0
-      min_vel_y: 0.0
-      max_vel_x: 0.5 # 0.26
-      max_vel_y: 0.0
-      max_vel_theta: 1.0
-      min_speed_xy: 0.0
-      max_speed_xy: 0.26
-      min_speed_theta: -1.0 # 0.0
-      # Add high threshold velocity for turtlebot 3 issue.
-      # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
-      acc_lim_x: 2.5
-      acc_lim_y: 0.0
-      acc_lim_theta: 3.2
-      decel_lim_x: -2.5
-      decel_lim_y: 0.0
-      decel_lim_theta: -3.2
-      vx_samples: 50 # 20
-      vy_samples: 50
-      vtheta_samples: 50 # 20
-      sim_time: 2.0 # 1.7
-      linear_granularity: 0.05
-      angular_granularity: 0.025
-      transform_tolerance: 0.2
-      xy_goal_tolerance: 0.25
-      trans_stopped_velocity: 0.25
-      short_circuit_trajectory_evaluation: True
-      stateful: True
-      critics: [
-        "ObstacleFootprint",
+      prune_distance: 0.1                      # Distance to prune global path behind robot's current pose (m),
+                                                # If prune_plan => True
+      prune_plan: True                          # If true, ignore poses along the global path
+                                                # that are further than prune_distance away from the robot.
+      short_circuit_trajectory_evaluation: True # As critics are applied to a trajectory, if the running sum 
+                                                # is greater than the best score found so far, stop applying 
+                                                # further critics for the trajectory as they cannot improve the score.
+      shorten_transformed_plan: True            # If true, only consider part of the transformed plan that is 
+                                                # within the local costmap.
+      trajectory_generator_name: "dwb_plugins::StandardTrajectoryGenerator" # To generate the trajectories.
+      transform_tolerance: 0.3                  # Time to wait for transform to be available before erroring out.
+    
+      critics:                    
+        # List of critics to use in scoring trajectories. Must not be empty.
+        # Order is not important.
+        [
+        "BaseObstacle",
         "GoalAlign",
         "GoalDist",
+        "ObstacleFootprint",
         "PathAlign",
-        "PathDist"]
-      # critics: ["ObstacleFootprint", "PreferForward", "RotateToGoal", "Oscillation", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      ObstacleFootprint:
-        # Scores a trajectory based on verifying all points along the robot’s
-        # footprint don’t touch an obstacle marked in the costmap.
-        scale: 3.0
-        sum_scores: True
-      # BaseObstacle:
-      #   # Scores a trajectory based on where the path passes over the costmap. 
-      #   # To use this properly, you must use the inflation layer in costmap
-      #   # to expand obstacles by the robot’s radius.
-      #   scale: 5.0 # 0.02
+        "PathDist",
+        # "PreferForward",
+        "RotateToGoal"
+        ]
+
+      BaseObstacle:
+        # Scores a trajectory based on where the path passes over the costmap. 
+        # To use this properly, you must use the inflation layer in costmap
+        # to expand obstacles by the robot’s radius.
+        aggregation_type: "sum"
+        scale: 0.02   # If sum_score is false, the score is based on the cell value corresponding to the last
+                      # pose in the trajectory. Otherwise the score is base on the sum of all
+                      # the cell values corresponding to the poses in the trajectory.
+        sum_score: True
       GoalAlign:
         # Scores a trajectory based on how well aligned the trajectory is with the goal pose.
-        scale: 5.0
+        scale: 24.0
         forward_point_distance: 0.1 # Point in front of robot to look ahead to compute angular change from.
       GoalDist:
         # Scores a trajectory based on how close the trajectory gets the robot to the goal pose.
-        scale: 5.0
+        aggregation_type: "last"
+        scale: 20.0
+      ObstacleFootprint:
+        # Scores a trajectory based on verifying all points along the robot’s
+        # footprint don’t touch an obstacle marked in the costmap.
+        scale: 0.5
       PathAlign:
         # Scores a trajectory based on how well it is aligned to the path provided by the global planner.
-        forward_point_distance: 0.1 # Point in front of robot to look ahead to compute angular change from.
-        scale: 20.0
+        aggregation_type: "last"
+        forward_point_distance: 0.23 # Point in front of robot to look ahead to compute angular change from.
+        scale: 8.0
       PathDist:
-        # cores a trajectory based on how well it is aligned to the path provided by the global planner.
-        scale: 35.0
+        # Scores a trajectory based on how well it is aligned to the path provided by the global planner.
+        aggregation_type: "last"
+        scale: 10.0
       PreferForward:
+        penalty: 1.0        # Score result if the trajectory isn’t forward (i.e., positive x velocity, small theta velocity).
         scale: 5.0
+        strafe_theta: 0.2   # If the x velocity is less than strafe_x, then if the absolute value of the theta velocity
+                            # is less than this the score is penalty.
+        strafe_x: 0.1       # If x velocity is less than this, ignore it and look at the theta velocity.
+        theta_scale: 10.0   # If the robot is moving sufficiently forward, the result is theta_scale times the theta velocity.
       RotateToGoal:
         # Only allows the robot to rotate to the goal orientation when it is sufficiently close to the goal location.
-        lookahead_time: 0.5 # -1.0
-        scale: 5.0
-        slowing_factor: 5.0
+        lookahead_time: 1.0     # If not negative, the yaw score is the yaw of a trajectory point
+                                # projected this distance ahead of the last pose in the trajectory.
+                                # If negative, the yaw score is simply the yaw of the last pose
+                                # in the trajectory.
+        scale: 6.0
+        slowing_factor: 5.0     # If the robot is near the goal and not rotating, the score is the velocity
+                                # times slowing_factor, plus the difference between the current
+                                # yaw score and the goal yaw.
+        trans_stopped_velocity: 0.01 # If the robot is moving slower than this, it is considered to be rotating only.
+        xy_goal_tolerance: 0.05  # If the robot is further than this distance from the goal,
+                                # return a score of 0.0.
+
 controller_server_rclcpp_node:
   ros__parameters:
-    use_sim_time: true
+    use_sim_time: True
 
 local_costmap:
   local_costmap:
@@ -217,9 +276,9 @@ local_costmap:
       origin_x: 0.0 # X origin of the costmap relative to width (m).
       origin_y: 0.0 # Y origin of the costmap relative to height (m).
       publish_frequency: 2.0 # Frequency to publish costmap to topic.
-      resolution: 0.0508 # Resolution of 1 pixel of the costmap, in meters.
+      resolution: 0.0254 # Resolution of 1 pixel of the costmap, in meters.
       robot_base_frame: base_link
-      robot_radius: 0.22
+      robot_radius: 0.02 ###0.22
       rolling_window: true # Whether costmap should roll with robot base frame.
       track_unknown_space: True # If false, treats unknown space as free space, else as unknown space.
       transform_tolerance: 0.3 # TF transform tolerance.
@@ -233,10 +292,10 @@ local_costmap:
       plugins: ["lidar_layer", "inflation_layer"]
       inflation_layer:
         enabled: True
-        cost_scaling_factor: 32.0 # 4.0 # Exponential decay factor across inflation radius.
+        cost_scaling_factor: 64.0     # Exponential decay factor across inflation radius.
         inflate_around_unknown: False # Whether to inflate unknown cells.
-        inflate_unknown: False # Whether to inflate unknown space.
-        inflation_radius: 0.2 # 0.3 # Radius to inflate costmap around lethal obstacles.
+        inflate_unknown: False        # Whether to inflate unknown space.
+        inflation_radius: 0.15         # Radius to inflate costmap around lethal obstacles.
         plugin: "nav2_costmap_2d::InflationLayer"
 
       lidar_layer:
@@ -363,12 +422,12 @@ global_costmap:
 
 map_server:
   ros__parameters:
-    use_sim_time: true
+    use_sim_time: True
     yaml_filename: "turtlebot3_world.yaml"
 
 map_saver:
   ros__parameters:
-    use_sim_time: true
+    use_sim_time: True
     save_map_timeout: 5.0
     free_thresh_default: 0.25
     occupied_thresh_default: 0.65
@@ -377,7 +436,7 @@ map_saver:
 planner_server:
   ros__parameters:
     expected_planner_frequency: 20.0
-    use_sim_time: true
+    use_sim_time: True
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
@@ -422,7 +481,7 @@ planner_server:
 
 planner_server_rclcpp_node:
   ros__parameters:
-    use_sim_time: true
+    use_sim_time: True
 
 recoveries_server:
   ros__parameters:
@@ -439,7 +498,7 @@ recoveries_server:
     global_frame: odom
     robot_base_frame: base_link
     transform_timeout: 0.1
-    use_sim_time: true
+    use_sim_time: True
     simulate_ahead_time: 2.0
     max_rotational_vel: 4.0
     min_rotational_vel: 0.4
@@ -447,12 +506,13 @@ recoveries_server:
 
 robot_state_publisher:
   ros__parameters:
-    use_sim_time: true
+    use_sim_time: True
 
 waypoint_follower:
   ros__parameters:
     loop_rate: 20
     stop_on_failure: false
+    use_sim_time: True
     waypoint_task_executor_plugin: "wait_at_waypoint"   
     wait_at_waypoint:
       plugin: "nav2_waypoint_follower::WaitAtWaypoint"
