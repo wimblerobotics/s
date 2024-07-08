@@ -104,157 +104,132 @@ bt_navigator_rclcpp_node:
 
 controller_server:
   ros__parameters:
-    controller_frequency: 20.0 # Frequency to run controller (Hz). cmd_vel will be published at the frequency.
-    controller_plugins: ["FollowPath"] # List of mapped names for controller plugins for processing requests and parameters.
-    failure_tolerance: 0.3 # Max duration controller plugin can fail before FollowPath action fails.
+    controller_frequency: 20.0          # Frequency to run controller (Hz). cmd_vel will be published at the frequency.
+    controller_plugins: ["FollowPath"]  # List of mapped names for controller plugins for processing requests and parameters.
+    failure_tolerance: 0.3              # Max duration controller plugin can fail before FollowPath action fails.
     goal_checker_plugins: ["general_goal_checker"] # Mapped name for goal checker plugin for checking goal is reached. 
     min_theta_velocity_threshold: 0.001 # Set cmd_vel theta-velocity to zero if less than this.
-    min_x_velocity_threshold: 0.001 # Set cmd_vel x-velocity to zero if less than this.
-    min_y_velocity_threshold: 0.0 # Set cmd_vel y-velocity to zero if less than this.
-    odom_topic: "odom" # Topic to get instantaneous measurement of speed from
+    min_x_velocity_threshold: 0.001     # Set cmd_vel x-velocity to zero if less than this.
+    min_y_velocity_threshold: 0.0       # Set cmd_vel y-velocity to zero if less than this.
+    odom_topic: "odom"                  # Topic to get instantaneous measurement of speed from
     progress_checker_plugins: ["progress_checker"] # Mapped name for progress checker plugin for checking progress made by robot.
-    speed_limit_topic: "speed_limit" # Speed limiting topic name to subscribe.
-    use_realtime_priority: False # Note, requires edit of /etc/security/limits.conf
+    speed_limit_topic: "speed_limit"     # Speed limiting topic name to subscribe.
+    use_realtime_priority: False        # Note, requires edit of /etc/security/limits.conf
     use_sim_time: False
 
     # Progress checker parameters
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
-      movement_time_allowance: 3.0 # Maximum amount of time a robot has to move the minimum radius (s).
+      movement_time_allowance: 3.0  # Maximum amount of time a robot has to move the minimum radius (s).
       required_movement_radius: 0.2 # Minimum amount a robot must move to be progressing to goal (m).
 
     # Goal checker parameters
     general_goal_checker:
       plugin: "nav2_controller::SimpleGoalChecker"
-      stateful: True # True => goal checker will not check if the xy position matches again once it is found to be true.
+      stateful: True                  # True => goal checker will not check if the xy position matches again once it is found to be true.
       xy_goal_tolerance: 0.0508       # Tolerance to meet goal completion criteria (m).
       yaw_goal_tolerance: 0.08726639  # Tolerance to meet goal completion criteria (rad).
 
-    # DWB parameters
+    # MPPI Controller parameters
     FollowPath:
-      # KinematicsHandler parameters
-      acc_lim_theta: 5.0      # Maximum acceleration theta (rad/s^2).
-      acc_lim_x: 2.5          # Maximum acceleration X (m/s^2).
-      acc_lim_y: 0.0          # Maximum acceleration Y (m/s^2).
-      decel_lim_theta: -5.0   # Maximum deceleration theta (rad/s^2).
-      decel_lim_x: -2.5       # Maximum deceleration X (m/s^2).
-      decel_lim_y: 0.0        # Maximum deceleration Y (m/s^2).
-      max_speed_xy: 0.26      # Maximum translational speed (m/s).
-      max_vel_theta: 3.14     # Maximum angular velocity (rad/s).
-      max_vel_x: 0.5          # Maximum velocity X (m/s).
-      max_vel_y: 0.0          # Maximum velocity Y (m/s).
-      min_speed_theta: -3.14  # Minimum angular speed (rad/s).
-      min_speed_xy: 0.0       # Minimum translational speed (m/s).
-      min_vel_x: -0.01        # Minimum velocity X (m/s).
-      min_vel_y: 0.0          # Minimum velocity Y (m/s).
-      xy_goal_tolerance: 0.05 # Tolerance to meet goal completion criteria (m).
+      batch_size: 2000            # Count of randomly sampled candidate trajectories from 
+                                  # current optimal control sequence in a given iteration.
+      gamma: 0.015                # A trade-off between smoothness (high) and low energy (low).
+      iteration_count: 1          # Iteration count in the MPPI algorithm. 
+                                  # Recommended to remain as 1 and instead prefer larger batch sizes.
+      model_dt: 0.05              # Length of each time step’s dt timestep, in seconds.
+      motion_model: "DiffDrive"   # The desired motion model to use for trajectory planning. 
+      plugin: "nav2_mppi_controller::MPPIController"
+      prune_distance: 1.7         # Distance ahead of nearest point on path to robot to prune path to.
+      reset_period: 1.0           # Required time of inactivity to reset optimizer (only in Humble).
+      retry_attempt_limit: 1      # Number of attempts to find feasible trajectory.
+      temperature: 0.3            # Selectiveness of trajectories by their costs.
+      time_steps: 56              # Number of time steps (points) in candidate trajectories.
+      transform_tolerance: 0.3    # Time tolerance for data transformations with TF (s).
+      visualize: false            # Whether to publish debugging trajectories for visualization.
 
-      # Publisher parameters
-      marker_lifetime: 0.2              # Lifetime of the markers (s).
-      publish_cost_grid_pc: False       # Whether to publish the cost grid as a PointCloud.
-      publish_evaluation: False         # Whether to publish the evaluation of the trajectory.
-      publish_global_plan: True         # Whether to publish the global plan.
-      publish_local_plan: True          # Whether to publish the local plan.
-      publish_transformed_plan: False   # Whether to publish the transformed plan.
-      publish_trajectories: False       # Whether to publish the trajectories.
+      vx_max: 0.5                 # Target maximum forward velocity (m/s).
+      vx_min: -0.35               # Maximum reverse velocity (m/s).Maximum reverse velocity (m/s).
+      vx_std: 0.2                 # Sampling standard deviation for Vx.
+      vy_max: 0.5                 # Target maximum lateral velocity (m/s) if using Omni model.
+      vy_std: 0.2                 # Sampling standard deviation for Vy.
+      wz_max: 1.9                 # Maximum rotational velocity (rad/s).
+      wz_std: 0.4                 # Sampling standard deviation for Wz (angular velocity).
 
-      # StandardTrajectoryGenerator parameters
-      angular_granularity: 0.025  # Granularity of the trajectory (rad).
-      discretize_by_time: True   # Whether to discretize the trajectory by time or by distance.
-      include_last_point: True    # Whether to include the last point in the trajectory.
-      linear_granularity: 0.05    # Granularity of the trajectory (m).
-      sim_time: 2.0               # Time to simulate ahead by (s).
-      time_granularity: 0.05       # Time between points in the trajectory (s).
+      TrajectoryVisualizer:
+        trajectory_step: 5        # The step between trajectories to visualize to downsample candidate trajectory pool.
+        time_step: 3              # The step between points on trajectories to visualize to downsample trajectory density.
 
-      # XYThetaIterator parameters
-      vtheta_samples: 50  # Number of velocity samples in the angular directions.
-      vx_samples: 20      # Number of velocity samples in the X velocity direction.
-      vy_samples: 20      # Number of velocity samples in the Y velocity direction.
-
-      # DWB Controller parameters.
-      debug_trajectory_details: False           # Whether to log the trajectory details for debugging.
-      default_critic_namespaces: ["dwb_critics"]  # Namespaces to load critics in.
-      forward_prune_distance: 1.0               # If prune_plan => true, prune the plan to this distance in 
-                                                # front of the robot's current pose (m).
-      goal_checker_name: "nav2_controller::SimpleGoalChecker" # Name of the goal checker plugin.
-      plugin: "dwb_core::DWBLocalPlanner"
-      prune_distance: 0.1                      # Distance to prune global path behind robot's current pose (m),
-                                                # If prune_plan => True
-      prune_plan: True                          # If true, ignore poses along the global path
-                                                # that are further than prune_distance away from the robot.
-      short_circuit_trajectory_evaluation: True # As critics are applied to a trajectory, if the running sum 
-                                                # is greater than the best score found so far, stop applying 
-                                                # further critics for the trajectory as they cannot improve the score.
-      shorten_transformed_plan: True            # If true, only consider part of the transformed plan that is 
-                                                # within the local costmap.
-      trajectory_generator_name: "dwb_plugins::StandardTrajectoryGenerator" # To generate the trajectories.
-      transform_tolerance: 0.3                  # Time to wait for transform to be available before erroring out.
-    
-      critics:                    
-        # List of critics to use in scoring trajectories. Must not be empty.
-        # Order is not important.
+      # AckermannConstrains:
+      #   min_turning_r: 0.2
+      
+      critics:
         [
-        "BaseObstacle",
-        "GoalAlign",
-        "GoalDist",
-        "ObstacleFootprint",
-        "PathAlign",
-        "PathDist",
-        # "PreferForward",
-        "RotateToGoal"
+        "ConstraintCritic", 
+        "ObstaclesCritic", 
+        "GoalCritic", 
+        "GoalAngleCritic", 
+        "PathAlignCritic", 
+        "PathFollowCritic", 
+        "PathAngleCritic", 
+        "PreferForwardCritic"
         ]
-
-      BaseObstacle:
-        # Scores a trajectory based on where the path passes over the costmap. 
-        # To use this properly, you must use the inflation layer in costmap
-        # to expand obstacles by the robot’s radius.
-        aggregation_type: "sum"
-        scale: 0.02   # If sum_score is false, the score is based on the cell value corresponding to the last
-                      # pose in the trajectory. Otherwise the score is base on the sum of all
-                      # the cell values corresponding to the poses in the trajectory.
-        sum_score: True
-      GoalAlign:
-        # Scores a trajectory based on how well aligned the trajectory is with the goal pose.
-        scale: 24.0
-        forward_point_distance: 0.1 # Point in front of robot to look ahead to compute angular change from.
-      GoalDist:
-        # Scores a trajectory based on how close the trajectory gets the robot to the goal pose.
-        aggregation_type: "last"
-        scale: 20.0
-      ObstacleFootprint:
-        # Scores a trajectory based on verifying all points along the robot’s
-        # footprint don’t touch an obstacle marked in the costmap.
-        scale: 0.5
-      PathAlign:
-        # Scores a trajectory based on how well it is aligned to the path provided by the global planner.
-        aggregation_type: "last"
-        forward_point_distance: 0.23 # Point in front of robot to look ahead to compute angular change from.
-        scale: 8.0
-      PathDist:
-        # Scores a trajectory based on how well it is aligned to the path provided by the global planner.
-        aggregation_type: "last"
-        scale: 10.0
-      PreferForward:
-        penalty: 1.0        # Score result if the trajectory isn’t forward (i.e., positive x velocity, small theta velocity).
-        scale: 5.0
-        strafe_theta: 0.2   # If the x velocity is less than strafe_x, then if the absolute value of the theta velocity
-                            # is less than this the score is penalty.
-        strafe_x: 0.1       # If x velocity is less than this, ignore it and look at the theta velocity.
-        theta_scale: 10.0   # If the robot is moving sufficiently forward, the result is theta_scale times the theta velocity.
-      RotateToGoal:
-        # Only allows the robot to rotate to the goal orientation when it is sufficiently close to the goal location.
-        lookahead_time: 1.0     # If not negative, the yaw score is the yaw of a trajectory point
-                                # projected this distance ahead of the last pose in the trajectory.
-                                # If negative, the yaw score is simply the yaw of the last pose
-                                # in the trajectory.
-        scale: 6.0
-        slowing_factor: 5.0     # If the robot is near the goal and not rotating, the score is the velocity
-                                # times slowing_factor, plus the difference between the current
-                                # yaw score and the goal yaw.
-        trans_stopped_velocity: 0.01 # If the robot is moving slower than this, it is considered to be rotating only.
-        xy_goal_tolerance: 0.05  # If the robot is further than this distance from the goal,
-                                # return a score of 0.0.
-
+      ConstraintCritic:
+        enabled: True
+        cost_power: 1
+        cost_weight: 4.0
+      GoalCritic:
+        enabled: True
+        cost_power: 1
+        cost_weight: 5.0
+        threshold_to_consider: 1.0
+      GoalAngleCritic:
+        enabled: True
+        cost_power: 1
+        cost_weight: 3.0
+        threshold_to_consider: 0.4
+      PreferForwardCritic:
+        enabled: True
+        cost_power: 1
+        cost_weight: 5.0
+        threshold_to_consider: 0.4
+      ObstaclesCritic:
+        enabled: True
+        cost_power: 1
+        repulsion_weight: 1.5
+        critical_weight: 20.0
+        consider_footprint: false
+        collision_cost: 10000.0
+        collision_margin_distance: 0.1
+        near_goal_distance: 0.5
+        inflation_radius: 0.55 # (only in Humble)
+        cost_scaling_factor: 10.0 # (only in Humble)
+      PathAlignCritic:
+        enabled: True
+        cost_power: 1
+        cost_weight: 14.0
+        max_path_occupancy_ratio: 0.05
+        trajectory_point_step: 3
+        threshold_to_consider: 0.40
+        offset_from_furthest: 20
+      PathFollowCritic:
+        enabled: True
+        cost_power: 1
+        cost_weight: 5.0
+        offset_from_furthest: 5
+        threshold_to_consider: 0.6
+      PathAngleCritic:
+        enabled: True
+        cost_power: 1
+        cost_weight: 2.0
+        offset_from_furthest: 4
+        threshold_to_consider: 0.40
+        max_angle_to_furthest: 1.0
+      # TwirlingCritic:
+      #   enabled: True
+      #   twirling_cost_power: 1
+      #   twirling_cost_weight: 10.0
+      
 controller_server_rclcpp_node:
   ros__parameters:
     use_sim_time: True
@@ -516,5 +491,5 @@ waypoint_follower:
     waypoint_task_executor_plugin: "wait_at_waypoint"   
     wait_at_waypoint:
       plugin: "nav2_waypoint_follower::WaitAtWaypoint"
-      enabled: true
+      enabled: True
       waypoint_pause_duration: 200
